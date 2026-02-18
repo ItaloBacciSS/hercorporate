@@ -17,16 +17,24 @@ criar_tabelas()
 
 @app.route("/")
 def home():
+    usuario = None
+    if "usuario_id" in session:
+        from database import buscar_usuario_por_id
+        usuario = buscar_usuario_por_id(session["usuario_id"])
     return render_template(
         "home.html",
-        usuario_logado="usuario_id" in session
+        usuario=usuario  # passa o dicionário do usuário
     )
 
 @app.route("/sobre")
 def sobre():
+    usuario = None
+    if "usuario_id" in session:
+        from database import buscar_usuario_por_id
+        usuario = buscar_usuario_por_id(session["usuario_id"])
     return render_template(
         "sobre.html",
-        usuario_logado="usuario_id" in session
+        usuario=usuario  # passa o usuário para usar {{ usuario.nome }}
     )
 
 @app.route("/login", methods=["GET", "POST"])
@@ -71,13 +79,16 @@ def curso():
         return redirect("/login")
 
     usuario_id = session["usuario_id"]
+    from database import modulos_aprovados, buscar_usuario_por_id
+
     aprovados = modulos_aprovados(usuario_id)
+    usuario = buscar_usuario_por_id(usuario_id)
 
     return render_template(
         "curso.html",
-        modulos_aprovados=aprovados
+        modulos_aprovados=aprovados,
+        usuario=usuario  # passa o usuário também para o header
     )
-
 # =========================
 # SALVAR RESULTADO DO QUESTIONÁRIO
 # =========================
