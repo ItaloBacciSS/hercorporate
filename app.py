@@ -4,14 +4,21 @@ from database import (
     validar_login,
     salvar_progresso_modulo,
     modulos_aprovados,
-    criar_tabelas
+    criar_tabelas,
+    buscar_usuario_por_id
 )
+import os
 
 app = Flask(__name__)
-app.secret_key = "sua_chave_secreta"
 
-# cria tabelas no startup
-criar_tabelas()
+# Use variável de ambiente para a chave secreta
+app.secret_key = os.environ.get("SECRET_KEY", "chave_fallback_insegura")
+
+# Cria tabelas no startup
+try:
+    criar_tabelas()
+except Exception as e:
+    print(f"Erro ao criar tabelas: {e}")
 
 # ---------------- ROTAS ---------------- #
 
@@ -19,29 +26,21 @@ criar_tabelas()
 def home():
     usuario = None
     if "usuario_id" in session:
-        from database import buscar_usuario_por_id
         usuario = buscar_usuario_por_id(session["usuario_id"])
-    return render_template(
-        "home.html",
-        usuario=usuario  # passa o dicionário do usuário
-    )
+    return render_template("home.html", usuario=usuario)
 
 @app.route("/sobre")
 def sobre():
     usuario = None
     if "usuario_id" in session:
-        from database import buscar_usuario_por_id
         usuario = buscar_usuario_por_id(session["usuario_id"])
-    return render_template(
-        "sobre.html",
-        usuario=usuario  # passa o usuário para usar {{ usuario.nome }}
-    )
+    return render_template("sobre.html", usuario=usuario)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        email = request.form["email"]
-        senha = request.form["senha"]
+        email = request.form.get("email")
+        senha = request.form.get("senha")
 
         usuario = validar_login(email, senha)
         if usuario:
@@ -55,9 +54,9 @@ def login():
 @app.route("/registro", methods=["GET", "POST"])
 def registro():
     if request.method == "POST":
-        nome = request.form["nome"]
-        email = request.form["email"]
-        senha = request.form["senha"]
+        nome = request.form.get("nome")
+        email = request.form.get("email")
+        senha = request.form.get("senha")
 
         if registrar_usuario(nome, email, senha):
             usuario = validar_login(email, senha)
@@ -79,19 +78,11 @@ def curso():
         return redirect("/login")
 
     usuario_id = session["usuario_id"]
-    from database import modulos_aprovados, buscar_usuario_por_id
-
     aprovados = modulos_aprovados(usuario_id)
     usuario = buscar_usuario_por_id(usuario_id)
 
-    return render_template(
-        "curso.html",
-        modulos_aprovados=aprovados,
-        usuario=usuario  # passa o usuário também para o header
-    )
-# =========================
-# SALVAR RESULTADO DO QUESTIONÁRIO
-# =========================
+    return render_template("curso.html", modulos_aprovados=aprovados, usuario=usuario)
+
 @app.route("/salvar-progresso-modulo", methods=["POST"])
 def salvar_progresso_modulo_route():
     if "usuario_id" not in session:
@@ -99,8 +90,8 @@ def salvar_progresso_modulo_route():
 
     dados = request.json
     usuario_id = session["usuario_id"]
-    modulo = dados["modulo"]
-    nota = dados["nota"]
+    modulo = dados.get("modulo")
+    nota = dados.get("nota")
 
     salvar_progresso_modulo(usuario_id, modulo, nota)
 
@@ -113,6 +104,5 @@ def salvar_progresso_modulo_route():
 
 # ---------------- RUN ---------------- #
 if __name__ == "__main__":
-    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)

@@ -5,41 +5,52 @@ import psycopg2
 # CONEXÃO COM POSTGRES (Render)
 # =========================
 def get_connection():
-    return psycopg2.connect(os.environ["DATABASE_URL"])
+    url = os.environ.get("DATABASE_URL")
+    if not url:
+        raise RuntimeError("DATABASE_URL não está definida nas variáveis de ambiente")
+
+    # Render costuma fornecer 'postgres://', mas psycopg2 espera 'postgresql://'
+    if url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql://", 1)
+
+    return psycopg2.connect(url)
 
 
 # =========================
 # CRIAÇÃO DAS TABELAS
 # =========================
 def criar_tabelas():
-    conn = get_connection()
-    cur = conn.cursor()
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
 
-    # Tabela de usuários
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS usuarios (
-            id SERIAL PRIMARY KEY,
-            nome TEXT NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            senha TEXT NOT NULL
-        );
-    """)
+        # Tabela de usuários
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS usuarios (
+                id SERIAL PRIMARY KEY,
+                nome TEXT NOT NULL,
+                email TEXT UNIQUE NOT NULL,
+                senha TEXT NOT NULL
+            );
+        """)
 
-    # Progresso por módulo
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS progresso_modulo (
-            id SERIAL PRIMARY KEY,
-            usuario_id INTEGER NOT NULL,
-            modulo INTEGER NOT NULL,
-            nota REAL NOT NULL,
-            aprovado BOOLEAN NOT NULL,
-            UNIQUE (usuario_id, modulo)
-        );
-    """)
+        # Progresso por módulo
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS progresso_modulo (
+                id SERIAL PRIMARY KEY,
+                usuario_id INTEGER NOT NULL,
+                modulo INTEGER NOT NULL,
+                nota REAL NOT NULL,
+                aprovado BOOLEAN NOT NULL,
+                UNIQUE (usuario_id, modulo)
+            );
+        """)
 
-    conn.commit()
-    cur.close()
-    conn.close()
+        conn.commit()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"Erro ao criar tabelas: {e}")
 
 
 # =========================
@@ -81,6 +92,24 @@ def validar_login(email, senha):
     conn.close()
 
     return usuario
+
+
+def buscar_usuario_por_id(usuario_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT id, nome, email FROM usuarios
+        WHERE id=%s
+    """, (usuario_id,))
+
+    usuario = cur.fetchone()
+    cur.close()
+    conn.close()
+
+    if usuario:
+        return {"id": usuario[0], "nome": usuario[1], "email": usuario[2]}
+    return None
 
 
 # =========================
