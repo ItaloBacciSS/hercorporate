@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Her Corporate</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/inscricao.css">
+
+    <!-- Fonte provisória (vamos trocar depois) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="header">
+        <!-- Logo / Marca -->
+        <a href="/" class="logo">
+            <img src="/static/imagens/logo.png" alt="Logo">
+            <span>Her Corporate</span>
+        </a>
+
+        <!-- Navegação central -->
+        <nav class="nav-center">
+            <a href="/sobre" class="nav-link">Sobre</a>
+            <a href="/inscricao" class="nav-link">Cursos</a>
+        </nav>
+
+        <!-- Login -->
+        <div class="header-login">
+            {% if usuario %}
+            <a href="/logout" class="login-btn">
+                <span class="nome">{{ usuario[1] }}</span>
+                <span class="logout">Logout</span>
+            </a>
+            {% else %}
+            <a href="/login" class="login-btn">Login</a>
+            {% endif %}
+        </div>
+
+
+    </header>
+
+    <main class="inscricao-main">
+        <div class="inscricao-container">
+            <h1>Inscrição no Curso</h1>
+            <p>Garanta sua vaga no curso agora!</p>
+
+            <!-- Vídeo centralizado -->
+            <video autoplay muted loop class="inscricao-video">
+                <source src="{{ url_for('static', filename='video/curso.mp4') }}" type="video/mp4">
+                Seu navegador não suporta vídeo.
+            </video>
+
+            <!-- Botão -->
+            <div class="inscricao-btn-container">
+                {% if usuario.inscrito %}
+                <!-- Já inscrito: botão "Entrar" -->
+                <a href="/curso" class="home-btn">Entrar</a>
+                {% else %}
+                <!-- Não inscrito: botão "Inscrever-se" -->
+                <form method="POST">
+                    <button type="submit" class="home-btn">Inscrever-se</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </main> <!-- =========================
+     FOOTER
+========================= -->
+    <footer class="site-footer">
+        <div class="footer-left">
+            &copy; 2026 Her Corporate
+        </div>
+        <div class="footer-right">
+            <a href="https://www.facebook.com" target="_blank">
+                <img src="/static/imagens/face.avif">
+            </a>
+            <a href="https://www.twitter.com" target="_blank">
+                <img src="/static/imagens/tt.png">
+            </a>
+            <a href="https://www.instagram.com" target="_blank">
+                <img src="/static/imagens/insta.png">
+            </a>
+        </div>
+    </footer>
+
+
+</body>
+
+</html>

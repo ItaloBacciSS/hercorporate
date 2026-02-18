@@ -1,0 +1,75 @@
+.inscricao-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    min-height: calc(100vh - 120px);
+    background-color: #fff;
+}
+
+.inscricao-container h1 {
+    font-size: 36px;
+    color: #9153cc;
+    margin-bottom: 20px;
+}
+
+.inscricao-container p {
+    font-size: 18px;
+    color: #4a148c;
+    margin-bottom: 40px;
+    max-width: 700px;
+}
+
+.inscricao-video {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    display: block;
+}
+
+.inscricao-btn-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.home-btn {
+    display: inline-block;
+    background-color: #f3d6c6;
+    color: #9153cc;
+    padding: 12px 28px;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.home-btn:hover {
+    background-color: #9153cc;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+@media screen and (max-width: 768px) {
+    .inscricao-container h1 {
+        font-size: 28px;
+    }
+    .inscricao-container p {
+        font-size: 16px;
+    }
+    .inscricao-video {
+        max-width: 100%;
+    }
+    .home-btn {
+        font-size: 16px;
+        padding: 10px 22px;
+    }
+}

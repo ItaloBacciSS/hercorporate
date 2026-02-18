@@ -1,0 +1,501 @@
+/* =========================
+   WRAPPER DO QUADRO
+   Centraliza o conteúdo
+   e cria espaçamento vertical
+========================= */
+.curso-hero-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 80px 0;
+    /* espaço acima e abaixo do quadro */
+}
+
+/* =========================
+   QUADRO PRINCIPAL
+   Mesmo padrão visual da Home
+========================= */
+.curso-hero {
+    width: 100%;
+    max-width: 1200px;
+    /* limita largura em telas grandes */
+    display: flex;
+    gap: 40px;
+    align-items: stretch;
+
+    background-color: var(--lilas-claro);
+    border-radius: 10px;
+    padding: 60px;
+}
+
+/* =========================
+   BLOCO DA IMAGEM (ESQUERDA)
+========================= */
+.curso-hero-img {
+    flex: 0.8;
+    /* ocupa metade proporcional */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.curso-hero-img img {
+    width: 1000%;
+    /* diminui ou aumenta a imagem */
+    max-width: 100%;
+    /* limite máximo */
+    object-fit: cover;
+    /* mantém proporção */
+}
+
+
+/* =========================
+   CONTEÚDO (DIREITA)
+========================= */
+.curso-hero-content {
+    flex: 1.2;
+    /* levemente maior que a imagem */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* TÍTULO PRINCIPAL */
+.curso-hero-content h1 {
+    color: var(--roxo-principal);
+    font-size: 34px;
+    margin-bottom: 30px;
+}
+
+/* =========================
+   SUBTÍTULO + DESCRIÇÃO
+   Cada bloco representa um conceito
+========================= */
+.curso-sub-bloco {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: 100px;
+}
+
+.curso-sub-bloco h3 {
+    font-size: 40px;
+    color: var(--roxo-principal);
+    margin-left: 20px;
+    margin-bottom: -10px;
+}
+
+.curso-sub-bloco p {
+    font-size: 14px;
+    color: var(--roxo-principal);
+    line-height: 1.5;
+}
+
+/* =========================
+   PARÁGRAFO COM ÍCONE DE TÓPICO
+   Imagem fica "à frente" do texto
+========================= */
+.curso-paragrafo-topico {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.curso-paragrafo-topico img {
+    width: 50px;
+    margin-top: -10px;
+    /* alinha melhor com o texto */
+}
+
+.curso-paragrafo-topico p {
+    font-size: 17px;
+    color: var(--roxo-principal);
+    line-height: 1.6;
+}
+
+
+
+/* =========================
+   LINHA DE SUBTÍTULOS
+   Deixa os blocos lado a lado
+========================= */
+.curso-sub-row {
+    display: flex;
+    gap: 40px;
+    /* espaço entre os dois blocos */
+    margin-bottom: 10px;
+}
+
+/* Cada bloco ocupa metade do espaço */
+.curso-sub-bloco {
+    flex: 1;
+}
+
+
+/* Módulos */
+.modulo {
+    background: #f4e9f9;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    margin-left: 33px;
+    margin-right: 33px;
+    overflow: hidden;
+}
+
+.modulo-header {
+    cursor: pointer;
+    padding: 18px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    background: #e2c8f3;
+}
+
+.modulo[open] .modulo-header {
+    background: #d3a9ec;
+}
+
+/* Conteúdo */
+.modulo-conteudo {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.capitulo,
+.questionario {
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+}
+
+/* Status */
+.status {
+    font-size: 13px;
+}
+
+.status.liberado {
+    color: green;
+}
+
+.status.bloqueado {
+    color: #8e24aa;
+}
+
+/* Bloqueados */
+.bloqueado {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* =========================
+   CAPÍTULO
+========================= */
+.capitulo {
+    background-color: #f3d6c6;
+    border-radius: 10px;
+    margin-top: 18px;
+    overflow: hidden;
+}
+
+/* Header do capítulo */
+.capitulo-header {
+    list-style: none;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 16px 22px;
+    font-weight: 600;
+    color: var(--roxo-principal);
+}
+
+/* Remove seta padrão */
+.capitulo-header::-webkit-details-marker {
+    display: none;
+}
+
+/* Seta */
+.capitulo-seta {
+    transition: transform 0.3s ease;
+}
+
+/* Gira seta ao abrir */
+.capitulo[open] .capitulo-seta {
+    transform: rotate(180deg);
+}
+
+/* Conteúdo */
+.capitulo-conteudo {
+    background-color: #f3d6c6;
+    padding: 20px 24px;
+}
+
+/* Parágrafos */
+.capitulo-conteudo p {
+    text-indent: 2em;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    font-size: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
+    color: #4a148c;
+    text-align: justify;
+    hyphens: auto;
+}
+
+.capitulo-conteudo ul {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    line-height: 2;
+    font-size: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
+    color: #4a148c;
+    text-align: justify;
+    hyphens: auto;
+}
+
+.capitulo-conteudo h2 {
+    color: #4a148c;
+    text-align: center;
+}
+
+.capitulo-conteudo h3 {
+    color: #4a148c;
+    margin-left: 30px;
+}
+
+/* =========================
+   FRASE COM EXPLICAÇÃO OCULTA
+========================= */
+.frase-hover {
+    margin: 20px 26px;
+    padding: 2px 20px;
+    background: #f3e5f5;
+    border-left: 4px solid var(--roxo-principal);
+    border-radius: 6px;
+    position: relative;
+}
+
+/* Frase principal */
+.frase-texto {
+    margin: 0;
+    font-style: italic;
+    color: #4a148c;
+}
+
+/* Explicação (oculta) */
+.frase-info {
+    display: inline-block;
+    font-size: 14px;
+    color: #6a1b9a;
+    margin-left: 76px;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+/* Hover revela explicação */
+.frase-hover:hover .frase-info {
+    opacity: 1;
+    max-height: 60px;
+}
+
+
+/* =========================
+   QUESTIONÁRIO
+========================= */
+
+/* Container geral do questionário */
+.questionario {
+    margin-top: 40px;
+    /* Afasta o questionário do conteúdo acima */
+    padding: 24px;
+    /* Dá “respiro” interno */
+    background-color: #fff;
+    /* Mantém o fundo branco, como solicitado */
+    border-radius: 12px;
+    /* Bordas arredondadas para visual mais moderno */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    /* Sombra leve para destacar sem pesar */
+}
+
+/* Bloco individual de cada questão */
+.questao {
+    margin-bottom: 32px;
+    /* Espaço entre questões para leitura confortável */
+}
+
+/* Texto da pergunta */
+.questao p {
+    margin-bottom: 14px;
+    /* Espaço entre pergunta e alternativas */
+    font-weight: 600;
+    /* Destaca a pergunta */
+    font-size: 1.05rem;
+    /* Leve aumento para hierarquia visual */
+    color: #2b2b2b;
+    /* Cinza escuro mais suave que preto puro */
+}
+
+/* Estilo base das alternativas */
+.questao label {
+    display: flex;
+    /* Alinha rádio + texto horizontalmente */
+    align-items: flex-start;
+    /* Garante alinhamento correto em textos longos */
+    gap: 10px;
+    /* Espaço entre o radio e o texto */
+    margin-bottom: 10px;
+    /* Espaço entre alternativas */
+    padding: 10px 14px;
+    /* Área clicável maior (melhor UX) */
+    border-radius: 8px;
+    /* Deixa as opções visualmente “cartões” */
+    cursor: pointer;
+    /* Indica interatividade */
+    transition: background 0.2s ease, transform 0.1s ease;
+    /* Animação suave ao interagir */
+}
+
+/* Efeito ao passar o mouse nas alternativas */
+.questao label:hover {
+    background-color: #f4f2f8;
+    /* Roxo bem claro para feedback visual */
+    transform: translateX(2px);
+    /* Movimento sutil para sensação de resposta */
+}
+
+/* Estilo do radio button */
+.questao input[type="radio"] {
+    margin-top: 3px;
+    /* Ajusta alinhamento vertical do radio */
+    accent-color: var(--roxo-principal);
+    /* Usa sua cor principal nos radios */
+}
+
+/* Botão de envio do questionário */
+.btn-questionario {
+    margin-top: 24px;
+    /* Espaço acima do botão */
+    padding: 12px 28px;
+    /* Botão mais confortável para clicar */
+    border-radius: 24px;
+    /* Botão mais arredondado (estética moderna) */
+    border: none;
+    background-color: var(--roxo-principal);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+    /* Transição suave */
+}
+
+/* Efeito hover do botão */
+.btn-questionario:hover {
+    background-color: #5a2dbd;
+    /* Tom levemente mais escuro no hover */
+    transform: translateY(-1px);
+    /* Elevação sutil */
+}
+
+/* Texto de resultado (aprovado/reprovado) */
+.resultado {
+    margin-top: 24px;
+    /* Espaço acima do resultado */
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+/* (Opcional) Diferenciar mensagens de sucesso e erro */
+.resultado.aprovado {
+    color: #2e7d32;
+    /* Verde para aprovação */
+}
+
+.resultado.reprovado {
+    color: #c62828;
+    /* Vermelho para reprovação */
+}
+
+/* =========================
+   FEEDBACK DAS QUESTÕES
+========================= */
+
+/* Questão correta */
+.questao.correta {
+    border: 2px solid #2e7d32;
+    /* Borda verde */
+    background-color: #e8f5e9;
+    /* Fundo verde claro */
+    padding: 16px;
+    border-radius: 10px;
+}
+
+/* Questão incorreta */
+.questao.incorreta {
+    border: 2px solid #c62828;
+    /* Borda vermelha */
+    background-color: #fdecea;
+    /* Fundo vermelho claro */
+    padding: 16px;
+    border-radius: 10px;
+}
+
+/* Texto explicativo abaixo da questão */
+.questao .feedback {
+    margin-top: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* Texto de erro */
+.questao.incorreta .feedback {
+    color: #c62828;
+}
+
+/* Texto de acerto */
+.questao.correta .feedback {
+    color: #2e7d32;
+}
+
+/* =========================
+   LINKS DE APROFUNDAMENTO
+========================= */
+
+/* Remove bullets padrão */
+.links-aprofundamento ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+/* Espaçamento entre links */
+.links-aprofundamento li {
+    margin-top: 10px;
+    margin-bottom: 8px;
+    margin-left: 50px;
+}
+
+/* Estilo dos links */
+.links-aprofundamento a {
+    color: #6a1b9a;
+    /* roxo principal */
+    text-decoration: none;
+    /* remove sublinhado padrão */
+    font-size: 14px;
+}
+
+/* Hover simples e elegante */
+.links-aprofundamento a:hover {
+    text-decoration: underline;
+}

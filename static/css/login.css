@@ -1,0 +1,85 @@
+/* TRAVA O SCROLL E REMOVE MARGENS */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden; /* trava o scroll */
+    font-family: var(--fonte-principal);
+    background-color: #ffffff;
+}
+
+/* CENTRAR LOGIN NA TELA */
+.login-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* ocupa toda a altura da tela */
+    text-align: center;
+}
+
+/* TÍTULO */
+.login-main h1 {
+    font-size: 32px;
+    color: var(--roxo-principal);
+    margin-bottom: 16px;
+}
+
+/* PARÁGRAFO */
+.login-main p {
+    font-size: 14px;
+    color: var(--roxo-principal);
+    margin-bottom: 24px;
+}
+
+.login-main .registro-link {
+    color: var(--roxo-principal);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-main .registro-link:hover {
+    text-decoration: underline;
+}
+
+/* FORMULÁRIO */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 280px; /* largura fixa para os campos */
+}
+
+/* CAMPOS */
+.login-form input {
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+/* BOTÃO */
+.login-btn {
+    padding: 12px 20px;
+    border-radius: 22px;
+    border: none;
+    background-color: var(--roxo-principal);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+
+.erro-msg {
+    color: var(--roxo-principal);
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-align: center;
+}

@@ -1,0 +1,127 @@
+.sobre-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 80px; /* compensa o header fixo */
+    padding: 20px;
+}
+
+/* CARD CENTRAL */
+.sobre-box {
+    width: 80%;
+    max-width: 1000px;
+    background-color: var(--lilas-claro);
+    border-radius: 14px;
+    padding: 40px 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:10px; /* espaçamento entre título, parágrafos e imagem */
+}
+
+.sobre-box h1 {
+    font-size: 35px;
+    color: var(--roxo-principal);
+}
+
+.sobre-box p {
+    font-size: 17px;
+    color: var(--roxo-principal);
+    line-height: 1.6;
+    max-width: 700px; /* limita largura do texto para melhor leitura */
+}
+
+.sobre-box .sobre-topic {
+    width: 100px; /* ajuste o tamanho da imagem do tópico */
+    height: auto;
+    margin-top: 20px;
+}
+
+/* CARDS LATERAIS ALINHADOS AO BOX CENTRAL */
+.sobre-cards {
+    display: flex;
+    justify-content: space-between; /* primeiro à esquerda, segundo à direita */
+    width: 80%; /* mesma largura do sobre-box */
+    max-width: 1000px; /* igual ao sobre-box */
+    margin-top: 60px;
+}
+
+/* Retângulos simples maiores */
+.sobre-card {
+    width: 48%; /* ocupam quase metade cada, com pequeno espaço entre */
+    min-height: 380px; /* altura mínima para caber título + imagem */
+    border-radius: 12px;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* alinha do topo */
+    background-color: #9153ccc5; /* cor de fundo lilás que combine */
+    overflow: hidden;
+    transition: all 0.4s ease; /* transição suave para hover e crescimento */
+    cursor: pointer;
+}
+
+/* AO PASSAR O MOUSE: eleva o card levemente */
+.sobre-card:hover {
+    transform: translateY(-5px); /* levanta o card */
+    box-shadow: 0 12px 25px rgba(0,0,0,0.25); /* sombra mais forte */
+}
+
+/* Imagens maiores */
+.sobre-card img {
+    width: 80%; /* ocupa largura do retângulo */
+    height: 300px;
+    align-self: center;
+    margin-bottom: 20px;
+    transition: transform 0.4s ease; /* animação da imagem */
+}
+
+/* AO PASSAR O MOUSE: imagem sobe levemente */
+.sobre-card:hover img {
+    transform: translateY(-10px);
+}
+
+/* Título */
+.sobre-card h3 {
+    font-size: 25px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    align-self: center;
+    color: #f3d6c6;
+}
+
+/* Parágrafo inicial escondido */
+.sobre-card p {
+    font-size: 13px;
+    margin-left: 40px;
+    margin-right: 40px;
+    color: #f3d6c6;
+    line-height: 1.6;
+
+    max-height: 0;          /* escondido */
+    opacity: 0;
+    overflow: hidden;       /* corta o conteúdo */
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+
+/* AO PASSAR O MOUSE: revela o parágrafo */
+.sobre-card:hover p {
+    max-height: 500px;      /* altura suficiente para o texto */
+    opacity: 1;
+}
+
+/* Cores diferentes */
+.card1 {
+    background-color: #9153cc; /* roxo principal */
+}
+
+.card2 {
+    background-color: #f3d6c6; /* bege */
+    color: var(--roxo-principal);
+}
+
+.card2 h3,
+.card2 p {
+    color: var(--roxo-principal);
+}

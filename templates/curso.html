@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Her Corporate</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/curso.css">
+
+    <!-- Fonte provisória (vamos trocar depois) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<script>
+    function avaliarQuestoes(form) {
+
+        let corretas = 0;
+
+        const questoes = form.querySelectorAll(".questao");
+
+        questoes.forEach((questao) => {
+
+            // limpa estados anteriores
+            questao.classList.remove("correta", "incorreta");
+            const feedbackAntigo = questao.querySelector(".feedback");
+            if (feedbackAntigo) feedbackAntigo.remove();
+
+            const marcada = questao.querySelector('input[type="radio"]:checked');
+            const correta = questao.querySelector('input[data-correta="true"]');
+
+            if (marcada && correta && marcada === correta) {
+                corretas++;
+
+                questao.classList.add("correta");
+
+                const fb = document.createElement("div");
+                fb.className = "feedback";
+                fb.textContent = "Resposta correta ✔";
+                questao.appendChild(fb);
+            } else {
+                questao.classList.add("incorreta");
+
+                const fb = document.createElement("div");
+                fb.className = "feedback";
+                fb.textContent = "Resposta incorreta ✖";
+                questao.appendChild(fb);
+            }
+        });
+
+        return corretas;
+    }
+</script>
+
+<script>
+    function corrigirQuestionarioModulo(botao) {
+
+        const form = botao.closest('.questionario');
+        const total = parseInt(form.dataset.total);
+        const moduloAtual = parseInt(form.dataset.modulo);
+
+        // 🔹 Corrige visualmente e conta acertos
+        const corretas = avaliarQuestoes(form);
+
+        const nota = (corretas / total) * 100;
+        const resultado = form.querySelector('.resultado');
+
+        // 🔹 Envia progresso ao backend
+        fetch("/salvar-progresso-modulo", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                modulo: moduloAtual,
+                nota: nota
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.aprovado) {
+                    resultado.textContent = "✅ Aprovado! Próximo módulo liberado.";
+                    resultado.style.color = "green";
+
+                    liberarProximoModulo(data.proximo_modulo);
+                } else {
+                    resultado.textContent = "❌ Reprovado. Você pode tentar novamente.";
+                    resultado.style.color = "red";
+                }
+            });
+    }
+</script>
+
+<script>
+    function liberarProximoModulo(numeroModulo) {
+        if (!numeroModulo) return;
+
+        const modulo = document.querySelector(
+            `.modulo[data-modulo="${numeroModulo}"]`
+        );
+
+        if (!modulo) return;
+
+        modulo.classList.remove('bloqueado');
+
+        const status = modulo.querySelector('.status');
+        if (status) {
+            status.textContent = "Liberado";
+            status.classList.remove('bloqueado');
+            status.classList.add('liberado');
+        }
+
+        modulo.style.pointerEvents = "auto";
+        modulo.style.opacity = "1";
+    }
+</script>
+
+
+<body>
+    <header class="header">
+        <!-- Logo / Marca -->
+        <a href="/" class="logo">
+            <img src="/static/imagens/logo.png" alt="Logo">
+            <span>Her Corporate</span>
+        </a>
+
+        <!-- Navegação central -->
+        <nav class="nav-center">
+            <a href="/sobre" class="nav-link">Sobre</a>
+            <a href="/curso" class="nav-link">Cursos</a>
+        </nav>
+
+        <!-- Login -->
+        <div class="header-login">
+            {% if usuario %}
+            <a href="/logout" class="login-btn">
+                <span class="nome">{{ usuario[1] }}</span>
+                <span class="logout">Logout</span>
+            </a>
+            {% else %}
+            <a href="/login" class="login-btn">Login</a>
+            {% endif %}
+        </div>
+
+
+    </header>
+
+
+    <section class="curso-page">
+
+        <!-- =========================
+         WRAPPER CENTRAL
+         Centraliza o conteúdo na tela
+         e cria margem superior e inferior
+        ========================== -->
+        <section class="curso-hero-wrapper">
+
+            <!-- =========================
+             QUADRO PRINCIPAL
+             Estrutura idêntica ao da Home:
+             imagem à esquerda e conteúdo à direita
+            ========================== -->
+            <div class="curso-hero">
+
+                <!-- IMAGEM DO LADO ESQUERDO -->
+                <div class="curso-hero-img">
+                    <img src="/static/imagens/mulhercurso.avif" alt="Introdução ao curso">
+                </div>
+
+                <!-- CONTEÚDO DO LADO DIREITO -->
+                <div class="curso-hero-content">
+
+                    <!-- TÍTULO PRINCIPAL -->
+                    <h1>English for Women in the Workplace: Corporate Language & Awareness of Microaggressions</h1>
+
+                    <!-- BLOCO DE SUBTÍTULOS LADO A LADO -->
+                    <div class="curso-sub-row">
+
+                        <div class="curso-sub-bloco">
+                            <h3>8</h3>
+                            <p>
+                                semanas
+                            </p>
+                        </div>
+
+                        <div class="curso-sub-bloco">
+                            <h3>4</h3>
+                            <p>
+                                módulos </p>
+                        </div>
+
+                    </div>
+
+
+                    <!-- PARÁGRAFO COM IMAGEM DE TÓPICO -->
+                    <div class="curso-paragrafo-topico">
+                        <img src="/static/imagens/certificado.png" alt="Indicador de tópico">
+                        <p>
+                            Obtenha um certificado ao concluir o curso!
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- GUIA DE BOAS VINDAS -->
+        <details class="modulo" opend>
+            <summary class="modulo-header">
+                <span>Guia de Boas Vindas</span>
+                <span class="modulo-seta">▾</span>
+            </summary>
+
+            <div class="capitulo-conteudo">
+                <p><b>Bem-vinda ao curso <i>English for Women in the Workplace: Corporate Language & Awareness of
+                            Microaggressions</i>.</b></p>
+                <p>Este curso foi desenvolvido por mulheres e para mulheres, com o objetivo de fortalecer a comunicação
+                    em língua inglesa no ambiente corporativo e acadêmico, ao mesmo tempo em que promove a
+                    conscientização sobre microagressões e dinâmicas de poder presentes nesses contextos. Este capítulo
+                    introdutório foi elaborado para orientá-la quanto ao funcionamento do curso e à organização da
+                    plataforma. Aqui você encontrará informações sobre como navegar pelo site, realizar o acesso aos
+                    materiais, realização de atividades avaliativas e acompanhamento de progresso.</p>
+                <p>O curso está estruturado em quatro módulos progressivos, organizados de forma a integrar
+                    desenvolvimento linguístico e consciência crítica sobre comunicação no ambiente corporativo.</p>
+                <ul>
+                    <li>Para melhor uso desta plataforma recomenda-se a dedicação média de sete a oito horas por
+                        semana – podendo ser dividida em 1 hora por dia de curso.</li>
+                    <li>Todas as atividades podem ser realizadas no seu próprio ritmo.</li>
+                    <li>Antes de iniciar o Capítulo 1, sugerimos que explore esta seção com atenção e realize o
+                        diagnóstico inicial.</li>
+                </ul>
+                <h2>Organização do Curso</h2>
+                <p>Este curso foi idealizado no formato de MOOC (Massive Open Online Course) sendo ofertado de maneira
+                    totalmente online e assíncrona. Ele está organizado em módulos sequenciais, que devem ser realizados
+                    de forma progressiva. Cada módulo contempla:</p>
+                <ul>
+                    <li>Leitura de textos teóricos;</li>
+                    <li>Análise de exemplos práticos;</li>
+                    <li>Assistir videoaulas;</li>
+                    <li>Exercitar habilidade de escuta por meio dos áudios;</li>
+                    <li>Atividade e questionários online com feedback automático.</li>
+                </ul>
+                <p>A carga horária para conclusão de curso é de 8 semanas. Para o melhor aproveitamento do conteúdo é
+                    sugerido que a aluna separe um período de 1 hora diária para estudar e tirar proveito de todo
+                    conteúdo e atividades propostas. </p>
+                <p>É importante ressaltar que o curso é destinado a mulheres que estão inseridas ou tentando adentram no
+                    mercado de trabalho por isso é compreensível a necessidade de flexibilização e este curso foi
+                    elaborado com esse requisito em mente.</p>
+                <h2>Navegabilidade</h2>
+                <p>O conteúdo do curso estará disponível exclusivamente nesta plataforma com cada módulo contendo
+                    material de estudo, instruções claras para realização de atividades, bem como respectivos
+                    questionários que podem ser respondidos no próprio navegador.</p>
+                <p>Após o envio das atividades objetivas, o feedback será disponibilizado automaticamente, permitindo
+                    que você acompanhe seu desempenho e retome os conteúdos sempre que necessário.</p>
+                <h2>Recomendações Técnicas</h2>
+                <p>Para que possa aproveitar 100% do curso, recomenda-se o acesso por meio de aparelho computador ou
+                    notebook, especialmente durante leitura dos textos, vídeos e realização das atividades. Embora seja
+                    possível acessar o conteúdo por dispositivos móveis, telas maiores favorecem a concentração, a
+                    organização das informações e a experiência de aprendizagem. Em adição a isso, é importante garantir
+                    uma conexão estável com a internet e reservar momentos específicos da semana para que possa se
+                    dedicar ao curso.</p>
+                <h2>Sua Participação no Curso</h2>
+                <p>A proposta do curso envolve não apenas o desenvolvimento de habilidades linguísticas, mas também a
+                    reflexão crítica sobre situações reais vivenciadas por mulheres no ambiente profissional. Espera-se
+                    que você participe de forma ativa, relacionando os conteúdos às suas vivências individuais e assim
+                    conseguir explorar estratégias linguísticas que possam ser aplicadas em contextos reais de trabalho.
+                </p>
+            </div>
+        </details>
+
+
+        <!-- MÓDULO 1 -->
+        <details class="modulo" open>
+            <!-- Header do módulo -->
+            <summary class="modulo-header">
+                <span>Módulo 1 — Mercado de Trabalho: Dinâmicas de Poder e Business English</span>
+                <span class="modulo-seta">▾</span>
+            </summary>
+
+            <!-- Conteúdo do módulo -->
+            <div class="modulo-conteudo">
+
+                <!-- =========================
+             INTRODUÇÃO
+             ========================= -->
+                <details class="capitulo">
+                    <!-- Cabeçalho do capítulo -->
+                    <summary class="capitulo-header">
+                        <span>Introdução</span>
+                        <span class="capitulo-seta">▾</span>
+                    </summary>
+
+                    <!-- Conteúdo do capítulo -->
+                    <div class="capitulo-conteudo">
+                        <p>Desde os primórdios, o mercado de trabalho é permeado por relações complexas que vão muito
+                            além das
+                            competências técnicas ou da produtividade. Nele, dinâmicas de poder, gênero e linguagem se
+                            fazem
+                            presentes ressaltando as dinâmicas estruturais que regem as relações sociais em sociedade e
+                            moldando
+                            oportunidades, comportamentos e percepções. Embora avanços importantes tenham sido
+                            alcançados nas
+                            últimas décadas de modo a transformar o ambiente de trabalho em espaço mais diversos, as
+                            desigualdades estruturais persistem em ocorrer, um triste reflexo tanto das interações
+                            cotidianas
+                            quanto das políticas institucionais. </p>
+                        <p>A distribuição desigual de oportunidades, a naturalização de comportamentos associados a
+                            identidades
+                            de gênero e os regimes discursivos que orientam práticas institucionais revelam que o
+                            trabalho não é
+                            um espaço neutro, mas um território atravessado por disputas simbólicas e materiais. A
+                            análise
+                            dessas dimensões tem a capacidade de esclarecer os mecanismos que sustentam tais
+                            desigualdades, e,
+                            no caso deste curso, proporcionar medidas de intervenção para coibir diversos tipos de
+                            microagressões e promover práticas mais justas e inclusivas no ambiente profissional.</p>
+                        <p>Um relatório conduzido pelo Programa das Nações Unidas para o Desenvolvimento (Pnud) foi
+                            divulgado em
+                            junho de 2023 com o título <cite>“Índice de Normas Sociais de Gênero”</cite>, revela que 90%
+                            dos
+                            entrevistados
+                            têm algum tipo de preconceito contra as mulheres. O estudo contou com pesquisa abrangendo
+                            85% da
+                            população mundial e ainda aponta que quase metade dos entrevistados acredita que os homens
+                            são
+                            melhores como líderes políticos do que mulheres. Além disso, duas em cada cinco pessoas
+                            acreditam
+                            que eles também se saem melhor como executivos. Esses dados salientam como essa questão
+                            advém de um
+                            problema estrutural da sociedade e que tem seus efeitos no âmbito particular pela presença
+                            de
+                            discursos organizacionais que reforçam estereótipos, comunicações internas com vieses
+                            linguísticos
+                            discriminatórios e desqualificação da mulher, as colocando em posições de invisibilidade e
+                            subserviência em sua inserção no mercado de trabalho.</p>
+                        <p>Este curso tem como enfoque como esse preconceito atua e é disseminado por meio do discurso e
+                            possui
+                            a linguagem como ferramenta de intimidação e coerção, algo que pode se tornar ainda mais
+                            complexo de
+                            ser identificado e combatido quando se está em ambiente fora da língua nativa. </p>
+                        <p>O termo <b>“microagressões”</b>, cunhado pelo psiquiatra Chester M. Pierce nos anos 1970, se
+                            refere a
+                            comentários, perguntas e pequenas ações hostis que questionam ou desqualificam, de maneira
+                            velada e
+                            rotineira, pessoas ou grupos de minorias sociais. Tais comentários preconceituosos em tom de
+                            piada,
+                            como <q>ela deve estar de TPM</q>, <q>só podia ser mulher</q> ou <q>prefiro chefe homem</q>,
+                            são recorrentes no dia a dia de muitas brasileiras e podem machucá-las mais do que se
+                            imagina. </p>
+                        <p>Por isso, neste capítulo conheceremos alguns termos que nomeiam diferentes tipos de
+                            microagressões
+                            presentes nesse ambiente e como podem se manifestar, de modo a entender como o machismo
+                            opera em
+                            situações rotineiras que podem estar tão enraizadas, ocorrendo até mesmo de forma velada.
+                            Vamos lá!
+                        </p>
+
+                    </div>
+                </details>
+
+
+                <!-- =========================
+                CAPÍTULO 1
+                ========================= -->
+                <details class="capitulo">
+                    <!-- Cabeçalho do capítulo -->
+                    <summary class="capitulo-header">
+                        <span>Capítulo 1 - Mercado de Trabalho</span>
+                        <span class="capitulo-seta">▾</span>
+                    </summary>
+
+                    <!-- Conteúdo do capítulo -->
+                    <div class="capitulo-conteudo">
+                        <p>O mercado de trabalho pode ser definido como o conjunto de relações sociais, econômicas e
+                            institucionais que regulam a oferta e a demanda de força de trabalho, envolvendo processos
+                            de contratação, permanência, mobilidade e exclusão profissional. Mais do que um espaço
+                            técnico de alocação de empregos, trata-se de uma arena social estruturada por normas,
+                            valores culturais, dispositivos legais e relações de poder que moldam quem acessa
+                            determinadas ocupações, em quais condições e com quais possibilidades de reconhecimento e
+                            progressão.</p>
+                        <p>Dessa forma, o mercado de trabalho não se configura apenas como um espaço de troca econômica,
+                            mas como um ambiente social profundamente marcado por valores, normas e hierarquias que
+                            refletem estruturas históricas de poder. As organizações, ainda que se apresentem como
+                            neutras ou meritocráticas, são atravessadas por relações sociais que reproduzem
+                            desigualdades de gênero, raça, classe e outras marcadores sociais.
+                        </p>
+                        <p>Mesmo com a crescente inserção das mulheres em diferentes setores profissionais, sua
+                            participação ainda ocorre de forma desigual, especialmente em cargos de liderança, tomada de
+                            decisão e áreas tradicionalmente associadas ao poder institucional. Barreiras simbólicas,
+                            como estereótipos de gênero, expectativas comportamentais e julgamentos implícitos sobre
+                            competência e autoridade, continuam a limitar oportunidades e impactar trajetórias
+                            profissionais femininas.</p>
+                        <p>Além disso, práticas organizacionais aparentemente neutras, como critérios de avaliação,
+                            padrões de comunicação e cultura corporativa, podem reforçar exclusões sutis, tornando o
+                            ambiente de trabalho um espaço onde desigualdades são mantidas não apenas por regras
+                            explícitas, mas também por interações cotidianas e discursos naturalizados.</p>
+                        <p>Além das desigualdades relacionadas ao acesso e à permanência no mercado de trabalho, é
+                            importante destacar que mulheres frequentemente enfrentam uma sobrecarga simbólica e
+                            emocional em seus ambientes profissionais. Espera-se delas comportamentos específicos, como
+                            cordialidade constante, flexibilidade emocional e disposição para tarefas de cuidado ou
+                            mediação de conflitos, exigências que raramente recaem com a mesma intensidade sobre homens.
+                        </p>
+                        <p>Outro aspecto relevante diz respeito à noção de meritocracia, amplamente difundida no
+                            discurso organizacional. Embora apresentada como princípio de justiça e igualdade, a
+                            meritocracia tende a desconsiderar desigualdades estruturais pré-existentes, naturalizando
+                            diferenças de desempenho como resultado exclusivo de esforço individual. </p>
+                        <p>Dessa forma, ignora-se que mulheres frequentemente partem de posições desiguais, enfrentando
+                            obstáculos simbólicos e institucionais que impactam suas oportunidades de reconhecimento e
+                            ascensão profissional.</p>
+                    </div>
+                </details>
+
+                <!-- =========================
+             CAPÍTULO 2
+             ========================= -->
+                <details class="capitulo">
+                    <!-- Cabeçalho do capítulo -->
+                    <summary class="capitulo-header">
+                        <span>Capítulo 2 - Dinâmicas de Poder</span>
+                        <span class="capitulo-seta">▾</span>
+                    </summary>
+
+                    <!-- Conteúdo do capítulo -->
+                    <div class="capitulo-conteudo">
+                        <p>As dinâmicas de poder podem ser compreendidas como os processos sociais por meio dos quais a
+                            autoridade, a influência e a legitimidade são distribuídas, negociadas e exercidas em
+                            diferentes contextos institucionais. No ambiente de trabalho, essas dinâmicas envolvem tanto
+                            estruturas formais, como cargos e hierarquias, quanto mecanismos simbólicos e discursivos
+                            que regulam quem pode falar, ser ouvido, tomar decisões e definir normas de comportamento.
+                        </p>
+                        <p>Esse sistema, dentro do ambiente profissional, manifesta-se tanto nas hierarquias formais
+                            quanto nas interações discursivas do cotidiano organizacional. Quem fala, quem é
+                            interrompido, quem tem suas ideias legitimadas e quem é silenciado são fatores que revelam
+                            como o poder simbólico opera nas instituições.</p>
+                        <p>No caso das relações de gênero, as dinâmicas frequentemente se expressam por meio de práticas
+                            linguísticas que desqualificam a fala feminina, questionam sua competência ou reduzem sua
+                            autoridade. Tais práticas, embora sutis, produzem efeitos cumulativos sobre o desempenho
+                            profissional, a saúde mental e a confiança das mulheres.</p>
+                        <p>É nesse cenário que se inserem as microagressões de gênero, mecanismos discursivos e
+                            comportamentais que operam de forma velada, mas sistemática, reforçando estereótipos e
+                            desigualdades estruturais. </p>
+                        <p>Ou seja, as relações de poder no ambiente de trabalho não se manifestam apenas por meio de
+                            ordens explícitas ou cargos hierárquicos, mas também por meio da linguagem, do controle do
+                            tempo de fala e da validação seletiva de ideias. A autoridade discursiva, isto é, quem tem
+                            sua fala considerada legítima, constitui um dos principais mecanismos de manutenção das
+                            desigualdades de gênero nas organizações.</p>
+                        <p>Essas situações tornam-se particularmente evidentes em contextos coletivos, como reuniões e
+                            apresentações, nos quais mulheres tendem a ser interrompidas com maior frequência, ter suas
+                            contribuições ignoradas ou reformuladas por colegas homens, que passam a ser reconhecidos
+                            como autores das ideias originalmente apresentadas.</p>
+                        <h2>Microagressões de Gênero</h2>
+                        <p>Conheça algumas nomenclaturas para diferentes tipos de microagressões direcionadas às
+                            mulheres:</p>
+                        <h3>Mansplanning</h3>
+                        <p>Refere-se à prática masculina de comentar ou explicar a uma mulher, de forma óbvia e
+                            condescendente, algo que ela já tem domínio com o intuito de subestimar sua inteligência.
+                            Esse termo se diferencia de outras práticas condescendentes por se basear na suposição de
+                            que o homem geralmente possui mais conhecimento do que a mulher.</p>
+                        <p>No ambiente de trabalho, o mansplaining manifesta-se como uma estratégia discursiva de
+                            reafirmação de autoridade e hierarquização de saberes, frequentemente ignorando a formação
+                            acadêmica, experiência profissional ou posição hierárquica da mulher.</p>
+                        <p>Exemplos recorrentes no contexto profissional:</p>
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                “Let me explain how this works, it’s actually pretty simple.”
+                            </p>
+
+                            <span class="frase-info">
+                                Ignorar a formação ou experiência da mulher
+                            </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                “What she’s trying to say is that the data indicates…” </p>
+
+                            <span class="frase-info">
+                                Apropriação da fala </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                “You probably don’t know this, but…” </p>
+
+                            <span class="frase-info">
+                                Explicar algo óbvio </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                “I hear you but let me walk you through it step by step.” </p>
+
+                            <span class="frase-info">
+                                Desconsiderar explicação dada por uma mulher </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                “I can tell you how feminism really works.” </p>
+
+                            <span class="frase-info">
+                                Mansplaining ideológico </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                “It’s a bit technical, but I’ll try to keep it simple for you.” </p>
+
+                            <span class="frase-info">
+                                Infantilização do discurso </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                “Technically, that’s not the exact term, but close enough.” </p>
+
+                            <span class="frase-info">
+                                Correção irrelevante para afirmar autoridade </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                “Let me jump in here and explain it properly.” </p>
+
+                            <span class="frase-info">
+                                Deslegitima a explicação anterior e se coloca como autoridade </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                “Trust me, I’ve dealt with this kind of thing before.” </p>
+
+                            <span class="frase-info">
+                                Apelo à experiência masculina como critério de verdade</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                “This might be a bit advanced, but I’ll do my best to explain.” </p>
+
+                            <span class="frase-info">
+                                Suposição de limitação cognitiva da interlocutora </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                “From a more rational point of view…” </p>
+
+                            <span class="frase-info">
+                                Associação implícita do masculino à racionalidade </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                “This is basic knowledge in the field.” </p>
+
+                            <span class="frase-info">
+                                Humilhação velada e invalidação da expertise </span>
+                        </div>
+                        <h3>Manterrupting</h3>
+                        <p>O termo manterrupting refere-se à interrupção desnecessária e recorrente da fala de uma
+                            mulher por um homem, prática comum em reuniões, apresentações e discussões profissionais.
+                            Essa interrupção impede a mulher de concluir seu raciocínio e funciona como um mecanismo de
+                            deslegitimação de sua opinião.</p>
+                        <p>Além de reduzir a participação feminina, o manterrupting impacta diretamente a percepção de
+                            autoridade, confiança e competência, reforçando hierarquias de gênero no espaço
+                            organizacional.</p>
+                        <p>O manterrupting não apenas interrompe a fala feminina, mas também fragmenta seu raciocínio,
+                            dificultando a exposição completa de ideias complexas. Essa prática pode levar ao
+                            auto-silenciamento, uma vez que mulheres passam a evitar intervenções para não serem
+                            constantemente interrompidas ou desacreditadas.</p>
+                        <p>Exemplos frequentes:</p>
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                Woman: “I was analyzing the report and noticed that—” </p>
+
+                            <span class="frase-info">
+                                Man: “Yeah, yeah, but the real issue is the budget.”
+                            </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                Woman: “If we look at the data from last quarter—”</p>
+
+                            <span class="frase-info">
+                                Man: “Can we get to the point?” </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                Woman: “What I’m suggesting is a gradual change—” </p>
+
+                            <span class="frase-info">
+                                Man: “So basically, you’re saying we should slow things down.” </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                Woman: “I think the main challenge is—” </p>
+
+                            <span class="frase-info">
+                                Man (speaking over her): “No, the challenge is execution.” </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                Woman: “As I was saying earlier—” </p>
+
+                            <span class="frase-info">
+                                Man: “Right, but we already covered that.” </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                Woman: “This approach could reduce costs—” </p>
+
+                            <span class="frase-info">
+                                Man: “Anyway, let’s talk about marketing.” </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                Woman: “One important factor we need to consider—” </p>
+
+                            <span class="frase-info">
+                                Man: “Hold on, let me stop you right there.” </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                Woman: “Based on the client feedback—” </p>
+
+                            <span class="frase-info">
+                                Man: “We don’t have time for that now.” </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                Woman: “My point is that the timeline—” </p>
+
+                            <span class="frase-info">
+                                Man: “We’ll circle back to that later.”</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                “If I can just finish—” </p>
+
+                            <span class="frase-info">
+                                Man: “I know where you’re going with this. </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                Woman: “The data suggests—” </p>
+
+                            <span class="frase-info">
+                                Man: “Yeah, yeah, we all know that.” </span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">
+                                Woman: “I’d like to add something—” </p>
+
+                            <span class="frase-info">
+                                Man: “Let’s hear from someone else.” </span>
+                        </div>
+                        <h3>Gaslighting</h3>
+                        <p>
+                            O gaslighting é uma forma de manipulação psicológica em que o agressor distorce fatos, nega
+                            acontecimentos e minimiza sentimentos com o objetivo de fazer a vítima duvidar de sua
+                            própria percepção, memória e sanidade. No ambiente de trabalho, essa prática é utilizada
+                            para desacreditar, intimidar e desestabilizar mulheres, muitas vezes levando-as a se culpar
+                            e questionar suas próprias competências.
+                        </p>
+
+                        <p>
+                            Além disso, o gaslighting pode ser especialmente prejudicial no ambiente de trabalho, pois
+                            afeta não apenas a saúde emocional da vítima, mas também sua credibilidade institucional. Ao
+                            duvidar de suas próprias percepções, a mulher pode hesitar em registrar denúncias, contestar
+                            decisões injustas ou buscar apoio, reforçando o ciclo de silenciamento.
+                        </p>
+
+                        <p>
+                            Veja alguns exemplos de frases que podem ser usadas para praticar gaslighting:
+                        </p>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">“You’re overreacting. It’s not that serious.”</p>
+                            <span class="frase-info">Minimização</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">“If you weren’t so sensitive, this wouldn’t be a problem.”</p>
+                            <span class="frase-info">Inversão de culpa</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">“That’s not what I said. You’re twisting my words.”</p>
+                            <span class="frase-info">Reescrita dos fatos</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">“Your memory is really unreliable.”</p>
+                            <span class="frase-info">Ataque à capacidade cognitiva</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">“Everyone agrees with me. You’re the only one who sees it that way.”
+                            </p>
+                            <span class="frase-info">Isolamento simbólico e pressão social</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">“You misunderstood the instructions. I was very clear.”</p>
+                            <span class="frase-info">Transferência de responsabilidade pelo erro</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">“You’re not good with details, that’s why you’re confused.”</p>
+                            <span class="frase-info">Desqualificação intelectual</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">“That never happened. You’re imagining things.”</p>
+                            <span class="frase-info">Negação da realidade</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">“You must have misunderstood the situation.”</p>
+                            <span class="frase-info">Questionamento da percepção da vítima)</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">“You’re being emotional, let’s stick to facts.”</p>
+                            <span class="frase-info">Desqualificação emocional associada ao gênero</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">“No one else had a problem with it.”</p>
+                            <span class="frase-info">Isolamento e invalidação coletiva</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">“You’re taking this too personally.”</p>
+                            <span class="frase-info">Individualização de um problema estrutural</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">“You always get confused in stressful situations.”</p>
+                            <span class="frase-info">Construção de narrativa de incompetência</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">“Let’s not rewrite history here.”</p>
+                            <span class="frase-info">Tentativa de encerrar o questionamento</span>
+                        </div>
+
+                        <div class="frase-hover">
+                            <p class="frase-texto">“I think you’re projecting.”</p>
+                            <span class="frase-info">Inversão psicológica e deslegitimação</span>
+                        </div>
+                        <h3>Para aprofundar o tema:</h3>
+                        <div class="links-aprofundamento">
+                            <ul>
+                                <li>
+                                    <a href="https://arxiv.org/abs/2511.07652" target="_blank">
+                                        From Double to Triple Burden: Gender Stratification in the Latin American Data
+                                        Annotation Gig Economy - Lauren Benjamin
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="https://www.gov.br/trabalho-e-emprego/pt-br/noticias-e-conteudo/2024/Julho/empregabilidade-das-mulheres-no-mercado-de-trabalho-cresce-no-mundo"
+                                        target="_blank">
+                                        Empregabilidade das mulheres no mercado de trabalho cresce no mundo - MTE
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                    </div>
+                </details>
+                <!-- =========================
+             CAPÍTULO 3
+             ========================= -->
+                <details class="capitulo">
+                    <!-- Cabeçalho do capítulo -->
+                    <summary class="capitulo-header">
+                        <span>Capítulo 3 - Liguagem Corporativa</span>
+                        <span class="capitulo-seta">▾</span>
+                    </summary>
+
+                    <!-- Conteúdo do capítulo -->
+                    <div class="capitulo-conteudo">
+                        <p>O contexto organizacional do ambiente de trabalho é composto de relações hierárquicas
+                            estruturadas, atividades coordenadas e tem como um dos pilares da comunicação eficaz a
+                            <b>linguagem corporativa</b>. Ela envolve não apenas o vocabulário utilizado, mas também o
+                            tom,
+                            clareza, objetividade e a adequação ao contexto profissional. Em um ambiente de trabalho que
+                            é cada vez mais dinâmico, multicultural e digital, o domínio sobre essa linguagem se tornou
+                            essencial para garantir o alinhamento, produtividade e colaboração entre equipes.
+                        </p>
+                        <p>A linguagem corporativa é definida como o conjunto de expressões, termos, comportamentos
+                            comunicativos e padrões interacionais utilizados no contexto profissional. Os principais
+                            objetivos para sua utilização são: facilitação da compreensão entre diferentes áreas,
+                            padronização de processos e fluxos informativos, transmitir profissionalismo, evitar
+                            ambiguidades e ruídos, reforçar a cultura organizacional da empresa. Por isso, expressões
+                            como feedback, follow-up, deadline e briefing já fazem parte do cotidiano de muitas
+                            empresas, mostrando como o vocabulário corporativo evolui e se adapta às necessidades do
+                            mercado.</p>
+                        <p>Todavia mais do que ser utilizada com o objetivo de dinamizar as comunicações do ambiente de
+                            trabalho, ela também é responsável por retratar como os papéis atuam socialmente. Segundo
+                            <cite>Discourse and Power</cite>, livro escrito pelo linguísta britânico Norman Fairclough,
+                            o discurso
+                            não apenas reflete relações sociais, mas as produz e reproduz. Isso significa que reuniões,
+                            relatórios, e-mails e apresentações não são neutros: eles organizam quem tem poder de fala,
+                            quem é ouvido e quem detém legitimidade.
+                        </p>
+                        <p>Atualmente existe muita literatura que relaciona gênero e comunicação organizacional, essas
+                            análises evidenciam que estilos discursivos distintos podem gerar impactos diferentes na
+                            percepção de autoridade. Na obra Talking <cite>from 9 to 5</cite>, a autora Deborah Tannen
+                            argumenta
+                            que diferenças comunicativas frequentemente interpretadas como questões individuais na
+                            verdade refletem padrões socioculturais que influenciam a distribuição de poder no trabalho.
+                        </p>
+                        <h2>Business English</h2>
+                        <p>O inglês consolidou-se, ao longo do século XX, como a principal língua franca do mercado
+                            corporativo global, especialmente em função da expansão econômica e política dos Estados
+                            Unidos, da globalização dos mercados financeiros e da internacionalização das empresas
+                            multinacionais. Nesse contexto, o domínio do inglês passou a ser associado não apenas à
+                            comunicação internacional, mas também ao acesso a oportunidades profissionais, redes de
+                            influência e posições estratégicas dentro das organizações.</p>
+                        <p>No ambiente corporativo contemporâneo, o inglês é frequentemente utilizado como língua
+                            oficial em reuniões, documentos, treinamentos, processos seletivos e comunicações internas,
+                            mesmo em empresas localizadas em países onde essa não é a língua nativa. Dessa forma, o
+                            idioma deixa de ser apenas uma competência técnica e passa a funcionar como um marcador
+                            simbólico de status, profissionalismo e autoridade.</p>
+                        <p>Entretanto, o uso do inglês como língua dominante no meio corporativo não ocorre de forma
+                            neutra. Profissionais que não têm o inglês como língua materna, especialmente mulheres,
+                            podem vivenciar situações de insegurança linguística, autocensura e exposição a julgamentos
+                            mais severos sobre sua competência. Pequenos desvios gramaticais, sotaques ou hesitações
+                            tendem a ser interpretados como falta de preparo ou de inteligência, reforçando
+                            desigualdades já existentes.</p>
+                        <p>Nesse sentido, o inglês pode atuar simultaneamente como ferramenta de inclusão e exclusão.
+                            Enquanto o domínio do idioma amplia possibilidades de inserção no mercado global, sua
+                            exigência irrestrita pode aprofundar assimetrias de poder, especialmente quando utilizada
+                            para silenciar, constranger ou deslegitimar a fala de determinados grupos. Em ambientes
+                            multilíngues, práticas como correções excessivas, reformulações desnecessárias da fala
+                            alheia ou comentários sobre sotaque assumem um papel semelhante ao das microagressões de
+                            gênero, operando como mecanismos sutis de controle simbólico.</p>
+                        <p>Assim, compreender o papel do inglês no mercado de trabalho implica reconhecer que a
+                            linguagem não é apenas um meio de comunicação, mas também um instrumento de poder. No
+                            contexto deste curso, essa reflexão é fundamental para identificar como microagressões de
+                            gênero podem ser intensificadas quando ocorrem em uma língua estrangeira, tornando-se ainda
+                            mais difíceis de nomear, contestar e enfrentar.</p>
+                        <p>A combinação desses dois elementos, linguagem corporativa e business english, são capazes de
+                            fortalecer a comunicação interna e externa no ambiente corporativo, especialmente em
+                            empresas multinacionais, negócios independentes em processo de expansão ou profissionais
+                            adentrando o mercado de trabalho. </p>
+                        <h3>Para aprofundar o tema:</h3>
+                        <p><cite>Gender and Power in the Workplace - Harriet Bradley</cite></p>
+                    </div>
+
+                </details>
+
+                <!-- =========================
+             CONCLUSÂO
+             ========================= -->
+                <details class="capitulo">
+                    <!-- Cabeçalho do capítulo -->
+                    <summary class="capitulo-header">
+                        <span>Conclusão</span>
+                        <span class="capitulo-seta">▾</span>
+                    </summary>
+
+                    <!-- Conteúdo do capítulo -->
+                    <div class="capitulo-conteudo">
+                        <p>Os termos apresentados neste módulo exemplificam como estratégias linguísticas são
+                            utilizadas para oprimir e perpetuar estereótipos de gênero, produzindo efeitos cumulativos
+                            sobre o desempenho, a saúde mental e a progressão na carreira das mulheres. Embora
+                            frequentemente naturalizadas ou invisibilizadas, essas práticas operam como mecanismos sutis
+                            de exclusão estrutural.</p>
+                        <p>Por esses motivos, é fundamental que mulheres inseridas no mercado de trabalho desenvolvam
+                            estratégias sistemáticas de enfrentamento dessas táticas opressivas, contribuindo para a
+                            promoção da equidade de gênero e para a construção de ambientes profissionais mais justos e
+                            inclusivos.</p>
+                        <p>Neste módulo foi possível compreender as noções básicas e refletir sobre a linguagem
+                            corporativa e suas implicações nas dinâmicas de poder no ambiente profissional,
+                            compreendendo que o discurso organizacional não é neutro, mas estruturante das relações
+                            hierárquicas, construção de autoridade e de reconhecimento institucional. No próximo módulo,
+                            avançaremos para uma abordagem mais aplicada sobre o tema no qual será explorada de forma
+                            sistemática os fundamentos do inglês empresarial, suas respectivas convenções pragmáticas,
+                            estratégias comunicativas e exigências ocasionadas pelo contexto globalizado. </p>
+                    </div>
+                </details>
+
+                <!-- =========================
+             QUESTIONÁRIO
+             ========================= -->
+                <details class="questionario">
+                    <!-- Cabeçalho do capítulo -->
+                    <summary class="capitulo-header">
+                        <span>Questionário Módulo 1</span>
+                        <span class="capitulo-seta">▾</span>
+                    </summary>
+
+                    <!-- Conteúdo do capítulo -->
+                    <div class="questionario-conteudo">
+                        <form class="questionario" data-total="15" data-modulo="1">
+                            <div class="questao">
+                                <p><strong>1.</strong> O que caracteriza as “microagressões” no ambiente de
+                                    trabalho?
+                                </p>
+
+                                <label>
+                                    <input type="radio" name="q1" value="a">
+                                    A. Críticas construtivas focadas estritamente na produtividade técnica do
+                                    funcionário.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q1" value="b" data-correta=true>
+                                    B. Comentários, perguntas e pequenas ações hostis que desqualificam minorias
+                                    de
+                                    forma velada.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q1" value="c">
+                                    C. Políticas institucionais explícitas que proíbem a entrada de mulheres em
+                                    cargos
+                                    de liderança.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q1" value="d">
+                                    D. Ações hostis diretas e violentas que resultam em demissão imediata.
+                                </label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>2.</strong> O termo “Mansplaining” é definido como a prática de:</p>
+
+                                <label>
+                                    <input type="radio" name="q2" value="a">
+                                    A. Elogiar excessivamente o trabalho de uma colega para evitar conflitos.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q2" value="b" data-correta=true>
+                                    B. Explicar algo a uma mulher de forma óbvia e condescendente, subestimando
+                                    sua
+                                    inteligência.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q2" value="c">
+                                    C. Interromper a fala de uma mulher antes que ela conclua seu raciocínio.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q2" value="d">
+                                    D. Delegar tarefas domésticas para mulheres dentro do ambiente de
+                                    escritório.
+                                </label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>3.</strong> Qual das alternativas abaixo exemplifica o fenômeno do
+                                    “Manterrupting”?</p>
+
+                                <label>
+                                    <input type="radio" name="q3" value="a">
+                                    A. Uma mulher corrigir um erro técnico de um colega homem durante uma
+                                    apresentação.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q3" value="b">
+                                    B. Um homem explicar um conceito técnico que a mulher já domina.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q3" value="c" data-correta=true>
+                                    C. Um homem falar por cima de uma colega em uma reunião, impedindo-a de
+                                    terminar a
+                                    frase.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q3" value="d">
+                                    D. Um gestor negar um aumento salarial sem apresentar justificativas claras.
+                                </label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>4.</strong> O “Gaslighting” é uma forma de manipulação psicológica
+                                    que busca:
+                                </p>
+
+                                <label>
+                                    <input type="radio" name="q4" value="a" data-correta=true>
+                                    A. Fazer com que a vítima duvide de sua própria percepção, memória e
+                                    sanidade.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q4" value="b">
+                                    B. Incentivar a mulher a assumir cargos de maior responsabilidade na
+                                    empresa.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q4" value="c">
+                                    C. Promover um ambiente de trabalho competitivo e meritocrático.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q4" value="d">
+                                    D. Aumentar a produtividade da equipe através de pressão psicológica.
+                                </label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>5.</strong> Um colega diz a uma profissional experiente: “Actually,
+                                    what you
+                                    meant to say is…”. O que o uso do advérbio “actually” indica nessa dinâmica?
+                                </p>
+
+                                <label>
+                                    <input type="radio" name="q5" value="a" data-correta=true>
+                                    A. Uma tentativa de corrigir ou reformular a fala da mulher, sugerindo que
+                                    ela não
+                                    foi clara ou correta.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q5" value="b">
+                                    B. Um pedido de desculpas por ter interrompido a conversa anteriormente.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q5" value="c">
+                                    C. Uma concordância entusiasmada com o que a mulher acabou de dizer.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q5" value="d">
+                                    D. Uma expressão de surpresa positiva com os dados apresentados.
+                                </label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>6.</strong> Na frase “I’ll try to keep it simple for you”, qual
+                                    nuance de
+                                    linguagem revela a prática de Mansplaining?</p>
+
+                                <label>
+                                    <input type="radio" name="q6" value="a" data-correta=true>
+                                    A. A expressão “keep it simple for you” sugere que a mulher não teria
+                                    capacidade de
+                                    entender algo complexo.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q6" value="b">
+                                    B. O termo “simple” é um elogio à forma como a empresa organiza seus
+                                    processos.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q6" value="c">
+                                    C. O uso de “try” indica que o homem não tem certeza se conseguirá explicar
+                                    bem.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q6" value="d">
+                                    D. A frase demonstra uma preocupação genuína com a gestão do tempo.
+                                </label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>7.</strong> Ao dizer “You’re twisting my words”, o que o agressor
+                                    pretende em
+                                    uma situação de Gaslighting?</p>
+
+                                <label>
+                                    <input type="radio" name="q7" value="a" data-correta=true>
+                                    A. Inverter a culpa, acusando a mulher de distorcer o que ele disse para
+                                    esconder a
+                                    própria mentira.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q7" value="b">
+                                    B. Elogiar a capacidade de síntese e interpretação da mulher.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q7" value="c">
+                                    C. Sugerir que a conversa está se tornando muito técnica.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q7" value="d">
+                                    D. Pedir que a colega ajude a traduzir um texto difícil.
+                                </label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>8.</strong> Durante uma apresentação, um gestor diz: “I hear you, but
+                                    let me
+                                    walk you through it step by step”. Qual disputa simbólica ocorre nessa fala?
+                                </p>
+
+                                <label>
+                                    <input type="radio" name="q8" value="a">
+                                    A. O cumprimento de uma norma técnica obrigatória.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q8" value="b">
+                                    B. Uma colaboração mútua entre colegas.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q8" value="c">
+                                    C. Uma disputa por recursos financeiros.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q8" value="d" data-correta=true>
+                                    D. A tentativa de desconsiderar a explicação da mulher para reafirmar
+                                    autoridade
+                                    masculina.
+                                </label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>9.</strong> Segundo o texto, por que o ambiente de trabalho não é um
+                                    espaço
+                                    neutro?</p>
+
+                                <label>
+                                    <input type="radio" name="q9" value="a">
+                                    A. Porque depende apenas do desempenho individual.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q9" value="b" data-correta=true>
+                                    B. Porque é atravessado por disputas simbólicas e materiais que refletem
+                                    desigualdades sociais.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q9" value="c">
+                                    C. Porque todas as decisões são técnicas.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q9" value="d">
+                                    D. Porque promove igualdade automática.
+                                </label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>10.</strong> Qual é um dos principais efeitos cumulativos das
+                                    microagressões?
+                                </p>
+
+                                <label>
+                                    <input type="radio" name="q10" value="a">
+                                    A. Aumento imediato de produtividade.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q10" value="b">
+                                    B. Fortalecimento das relações interpessoais.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q10" value="c" data-correta=true>
+                                    C. Impactos negativos na saúde mental, confiança e progressão na carreira.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q10" value="d">
+                                    D. Redução das responsabilidades.
+                                </label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>11.</strong> Segundo o relatório do PNUD, qual crença ainda é
+                                    amplamente
+                                    compartilhada?</p>
+
+                                <label>
+                                    <input type="radio" name="q11" value="a">
+                                    A. Mulheres são melhores líderes políticos.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q11" value="b" data-correta=true>
+                                    B. Homens são vistos como líderes políticos e executivos mais competentes.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q11" value="c">
+                                    C. A desigualdade de gênero foi superada.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q11" value="d">
+                                    D. O preconceito existe apenas em países pobres.
+                                </label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>12.</strong> Qual prática contribui para a invisibilização da fala
+                                    feminina?
+                                </p>
+
+                                <label>
+                                    <input type="radio" name="q12" value="a">
+                                    A. Incentivo à participação.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q12" value="b">
+                                    B. Escuta ativa.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q12" value="c" data-correta=true>
+                                    C. Apropriação da fala da mulher por colegas homens.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q12" value="d">
+                                    D. Alternância equilibrada de fala.
+                                </label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>13.</strong> Por que microagressões são mais difíceis de identificar
+                                    em
+                                    ambientes multilíngues?</p>
+
+                                <label>
+                                    <input type="radio" name="q13" value="a">
+                                    A. Porque o inglês elimina relações de poder.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q13" value="b">
+                                    B. Porque línguas estrangeiras impedem preconceitos.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q13" value="c" data-correta=true>
+                                    C. Porque tons e expressões sutis podem passar despercebidos.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q13" value="d">
+                                    D. Porque vocabulário técnico é neutro.
+                                </label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>14.</strong> Qual é o papel da linguagem nas relações de poder?</p>
+
+                                <label>
+                                    <input type="radio" name="q14" value="a">
+                                    A. Elemento puramente técnico.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q14" value="b">
+                                    B. Instrumento neutro.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q14" value="c" data-correta=true>
+                                    C. Ferramenta que pode reforçar ou desafiar desigualdades estruturais.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q14" value="d">
+                                    D. Recurso exclusivo da escrita formal.
+                                </label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>15.</strong> Desenvolver consciência crítica sobre a linguagem
+                                    permite às
+                                    mulheres:</p>
+
+                                <label>
+                                    <input type="radio" name="q15" value="a">
+                                    A. Evitar conflitos.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q15" value="b" data-correta=true>
+                                    B. Reconhecer, nomear e enfrentar práticas discursivas opressivas.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q15" value="c">
+                                    C. Assumir cargos automaticamente.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="q15" value="d">
+                                    D. Eliminar todas as desigualdades institucionais.
+                                </label>
+                            </div>
+
+
+                            <button type="button" class="btn-questionario" onclick="corrigirQuestionarioModulo(this)">
+                                Enviar respostas
+                            </button>
+                            <p class="resultado"></p>
+                        </form>
+                    </div>
+                </details>
+
+            </div>
+
+        </details>
+
+
+        <!-- MÓDULO 2 -->
+        <details class="modulo {% if 1 not in modulos_aprovados %}bloqueado{% endif %}" data-modulo="2">
+            <summary class="modulo-header">
+                <span>Módulo 2 — Desenvolvimento</span>
+
+                {% if 1 in modulos_aprovados %}
+                <span class="status liberado">Liberado</span>
+                {% else %}
+                <span class="status bloqueado">Bloqueado</span>
+                {% endif %}
+            </summary>
+
+            <div class="modulo-conteudo">
+                <div class="capitulo bloqueado">Capítulo 1</div>
+                <div class="capitulo bloqueado">Capítulo 2</div>
+                <div class="capitulo bloqueado">Capítulo 3</div>
+                <div class="capitulo bloqueado">Capítulo 4</div>
+
+                <div class="questionario bloqueado">
+                    Questionário do Módulo 2
+                </div>
+            </div>
+        </details>
+
+        <!-- MÓDULO 3 -->
+        <details class="modulo bloqueado">
+            <summary class="modulo-header">
+                <span>Módulo 3 — Aplicação</span>
+                <span class="status bloqueado">Bloqueado</span>
+            </summary>
+
+            <div class="modulo-conteudo">
+                <div class="capitulo bloqueado">Capítulo 1</div>
+                <div class="capitulo bloqueado">Capítulo 2</div>
+                <div class="capitulo bloqueado">Capítulo 3</div>
+                <div class="capitulo bloqueado">Capítulo 4</div>
+
+                <div class="questionario bloqueado">
+                    Questionário do Módulo 3
+                </div>
+            </div>
+        </details>
+
+        <!-- MÓDULO 4 -->
+        <details class="modulo bloqueado">
+            <summary class="modulo-header">
+                <span>Módulo 4 — Conclusão</span>
+                <span class="status bloqueado">Bloqueado</span>
+            </summary>
+
+            <div class="modulo-conteudo">
+                <div class="capitulo bloqueado">Capítulo 1</div>
+                <div class="capitulo bloqueado">Capítulo 2</div>
+                <div class="capitulo bloqueado">Capítulo 3</div>
+                <div class="capitulo bloqueado">Capítulo 4</div>
+
+                <div class="questionario bloqueado">
+                    Questionário Final
+                </div>
+            </div>
+        </details>
+
+        </main>
+        <!-- =========================
+     FOOTER
+========================= -->
+        <footer class="site-footer">
+            <div class="footer-left">
+                &copy; 2026 Her Corporate
+            </div>
+            <div class="footer-right">
+                <a href="https://www.facebook.com" target="_blank">
+                    <img src="/static/imagens/face.avif">
+                </a>
+                <a href="https://www.twitter.com" target="_blank">
+                    <img src="/static/imagens/tt.png">
+                </a>
+                <a href="https://www.instagram.com" target="_blank">
+                    <img src="/static/imagens/insta.png">
+                </a>
+            </div>
+        </footer>
+
+
+</body>
+
+</html>
