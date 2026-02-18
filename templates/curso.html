@@ -29,7 +29,7 @@
             const marcada = questao.querySelector('input[type="radio"]:checked');
             const correta = questao.querySelector('input[data-correta="true"]');
 
-            if (marcada && correta && marcada === correta) {
+            if (marcada && marcada.dataset.correta === "true") {
                 corretas++;
 
                 questao.classList.add("correta");
