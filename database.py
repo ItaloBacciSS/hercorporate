@@ -1,88 +1,120 @@
-import sqlite3
+import os
+import psycopg2
 
-conn = sqlite3.connect("hercorporate.db", check_same_thread=False)
-cursor = conn.cursor()
+# =========================
+# CONEXÃO COM POSTGRES (Render)
+# =========================
+def get_connection():
+    return psycopg2.connect(os.environ["DATABASE_URL"])
 
-# Tabela de usuários
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS usuarios (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    senha TEXT NOT NULL
-)
-''')
-conn.commit()
 
-# Funções básicas
+# =========================
+# CRIAÇÃO DAS TABELAS
+# =========================
+def criar_tabelas():
+    conn = get_connection()
+    cur = conn.cursor()
+
+    # Tabela de usuários
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS usuarios (
+            id SERIAL PRIMARY KEY,
+            nome TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            senha TEXT NOT NULL
+        );
+    """)
+
+    # Progresso por módulo
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS progresso_modulo (
+            id SERIAL PRIMARY KEY,
+            usuario_id INTEGER NOT NULL,
+            modulo INTEGER NOT NULL,
+            nota REAL NOT NULL,
+            aprovado BOOLEAN NOT NULL,
+            UNIQUE (usuario_id, modulo)
+        );
+    """)
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
+# =========================
+# USUÁRIOS
+# =========================
 def registrar_usuario(nome, email, senha):
+    conn = get_connection()
+    cur = conn.cursor()
+
     try:
-        cursor.execute("INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)", (nome, email, senha))
+        cur.execute("""
+            INSERT INTO usuarios (nome, email, senha)
+            VALUES (%s, %s, %s)
+        """, (nome, email, senha))
+
         conn.commit()
         return True
-    except sqlite3.IntegrityError:
+
+    except psycopg2.errors.UniqueViolation:
+        conn.rollback()
         return False
 
+    finally:
+        cur.close()
+        conn.close()
+
+
 def validar_login(email, senha):
-    cursor.execute("SELECT * FROM usuarios WHERE email=? AND senha=?", (email, senha))
-    return cursor.fetchone()
+    conn = get_connection()
+    cur = conn.cursor()
 
-def buscar_usuario_por_id(usuario_id):
-    cursor.execute("SELECT * FROM usuarios WHERE id=?", (usuario_id,))
-    return cursor.fetchone()
+    cur.execute("""
+        SELECT id, nome FROM usuarios
+        WHERE email=%s AND senha=%s
+    """, (email, senha))
 
-# =========================
-# TABELA DE PROGRESSO POR MÓDULO
-# =========================
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS progresso_modulo (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    usuario_id INTEGER NOT NULL,
-    modulo INTEGER NOT NULL,
-    nota REAL NOT NULL,
-    aprovado INTEGER NOT NULL,
-    UNIQUE(usuario_id, modulo)
-)
-""")
-conn.commit()
+    usuario = cur.fetchone()
+    cur.close()
+    conn.close()
+
+    return usuario
 
 
 # =========================
-# SALVAR / ATUALIZAR NOTA DO MÓDULO
+# PROGRESSO DO MÓDULO
 # =========================
 def salvar_progresso_modulo(usuario_id, modulo, nota):
-    aprovado = 1 if nota >= 60 else 0
+    aprovado = nota >= 60
 
-    cursor.execute("""
-    INSERT INTO progresso_modulo (usuario_id, modulo, nota, aprovado)
-    VALUES (?, ?, ?, ?)
-    ON CONFLICT(usuario_id, modulo)
-    DO UPDATE SET nota=?, aprovado=?
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        INSERT INTO progresso_modulo (usuario_id, modulo, nota, aprovado)
+        VALUES (%s, %s, %s, %s)
+        ON CONFLICT (usuario_id, modulo)
+        DO UPDATE SET nota=%s, aprovado=%s
     """, (usuario_id, modulo, nota, aprovado, nota, aprovado))
 
     conn.commit()
+    cur.close()
+    conn.close()
 
 
-# =========================
-# VERIFICAR SE MÓDULO ESTÁ APROVADO
-# =========================
-def modulo_aprovado(usuario_id, modulo):
-    cursor.execute("""
-    SELECT aprovado FROM progresso_modulo
-    WHERE usuario_id=? AND modulo=?
-    """, (usuario_id, modulo))
-
-    resultado = cursor.fetchone()
-    return resultado and resultado[0] == 1
-
-# =========================
-# BUSCAR MÓDULOS APROVADOS
-# =========================
 def modulos_aprovados(usuario_id):
-    cursor.execute("""
-    SELECT modulo FROM progresso_modulo
-    WHERE usuario_id=? AND aprovado=1
-    """, (usuario_id,))
-    
-    return [row[0] for row in cursor.fetchall()]
+    conn = get_connection()
+    cur = conn.cursor()
 
+    cur.execute("""
+        SELECT modulo FROM progresso_modulo
+        WHERE usuario_id=%s AND aprovado=true
+    """, (usuario_id,))
+
+    modulos = [row[0] for row in cur.fetchall()]
+
+    cur.close()
+    conn.close()
+    return modulos
