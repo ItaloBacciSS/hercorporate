@@ -137,25 +137,29 @@
         const modulo = form.dataset.modulo;
         const total = parseInt(form.dataset.total);
 
-        const respostas = {};
+        // monta string "q1=b;q2=c;q3=a"
+        const respostas = [];
         for (let i = 1; i <= total; i++) {
             const selecionado = form.querySelector(`input[name="q${i}"]:checked`);
             if (selecionado) {
-                respostas[`q${i}`] = selecionado.value;
+                respostas.push(`q${i}=${selecionado.value}`);
             }
         }
+        const respostasStr = respostas.join(";");
 
+        // calcula nota
         let nota = 0;
         form.querySelectorAll("input[data-correta=true]:checked").forEach(() => nota++);
         nota = (nota / total) * 100;
 
+        // envia para backend
         const resp = await fetch("/salvar-progresso-modulo", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 modulo: parseInt(modulo),
                 nota: nota,
-                respostas: respostas
+                respostas: respostasStr
             })
         });
 

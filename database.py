@@ -80,34 +80,25 @@ def buscar_usuario_por_id(usuario_id):
     return None
 
 def salvar_progresso_modulo(usuario_id, modulo, nota, respostas=None):
+    aprovado = nota >= 60
     conn = get_connection()
     cur = conn.cursor()
 
-    # Verifica se já existe registro aprovado
-    cur.execute("""
-        SELECT aprovado FROM progresso_modulo
-        WHERE usuario_id=%s AND modulo=%s
-    """, (usuario_id, modulo))
-    registro = cur.fetchone()
-
-    if registro and registro[0]:  # já aprovado
-        cur.close()
-        conn.close()
-        return False  # não atualiza
-
-    aprovado = nota >= 60
+    # transforma dict em string "q1=b;q2=c;q3=a"
+    respostas_str = ";".join([f"{k}={v}" for k,v in respostas.items()]) if respostas else None
 
     cur.execute("""
         INSERT INTO progresso_modulo (usuario_id, modulo, nota, aprovado, respostas)
         VALUES (%s, %s, %s, %s, %s)
         ON CONFLICT (usuario_id, modulo)
         DO UPDATE SET nota=%s, aprovado=%s, respostas=%s
-    """, (usuario_id, modulo, nota, aprovado, respostas, nota, aprovado, respostas))
+    """, (usuario_id, modulo, nota, aprovado, respostas_str, nota, aprovado, respostas_str))
 
     conn.commit()
     cur.close()
     conn.close()
     return True
+
 
 def modulos_aprovados(usuario_id):
     conn = get_connection()
@@ -117,3 +108,4 @@ def modulos_aprovados(usuario_id):
     cur.close()
     conn.close()
     return modulos
+
