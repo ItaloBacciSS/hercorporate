@@ -25,6 +25,14 @@ def home():
         usuario = buscar_usuario_por_id(session["usuario_id"])
     return render_template("home.html", usuario=usuario)
 
+@app.route("/sobre")
+def sobre():
+    usuario = None
+    if "usuario_id" in session:
+        usuario = buscar_usuario_por_id(session["usuario_id"])
+    return render_template("sobre.html", usuario=usuario)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
