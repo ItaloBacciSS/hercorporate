@@ -129,6 +129,42 @@
     }
 </script>
 
+<script>
+    document.querySelector(".questionario").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const modulo = form.dataset.modulo;
+        const total = parseInt(form.dataset.total);
+
+        const respostas = {};
+        for (let i = 1; i <= total; i++) {
+            const selecionado = form.querySelector(`input[name="q${i}"]:checked`);
+            if (selecionado) {
+                respostas[`q${i}`] = selecionado.value;
+            }
+        }
+
+        let nota = 0;
+        form.querySelectorAll("input[data-correta=true]:checked").forEach(() => nota++);
+        nota = (nota / total) * 100;
+
+        const resp = await fetch("/salvar-progresso-modulo", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                modulo: parseInt(modulo),
+                nota: nota,
+                respostas: respostas
+            })
+        });
+
+        const resultado = await resp.json();
+        console.log(resultado);
+    });
+</script>
+
+
 
 <body>
     <header class="header">
