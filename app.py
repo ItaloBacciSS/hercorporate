@@ -5,7 +5,8 @@ from database import (
     salvar_progresso_modulo,
     modulos_aprovados,
     criar_tabelas,
-    buscar_usuario_por_id
+    buscar_usuario_por_id,
+    get_connection
 )
 import os
 
@@ -60,10 +61,20 @@ def logout():
 def curso():
     if "usuario_id" not in session:
         return redirect("/login")
+
     usuario_id = session["usuario_id"]
     aprovados = modulos_aprovados(usuario_id)
     usuario = buscar_usuario_por_id(usuario_id)
-    return render_template("curso.html", modulos_aprovados=aprovados, usuario=usuario)
+
+    # Buscar respostas salvas do módulo atual
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT modulo, respostas, aprovado FROM progresso_modulo WHERE usuario_id=%s", (usuario_id,))
+    progresso = cur.fetchall()
+    cur.close()
+    conn.close()
+
+    return render_template("curso.html", modulos_aprovados=aprovados, usuario=usuario, progresso=progresso)
 
 @app.route("/salvar-progresso-modulo", methods=["POST"])
 def salvar_progresso_modulo_route():

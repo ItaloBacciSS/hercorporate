@@ -113,6 +113,22 @@
     }
 </script>
 
+<script>function carregarRespostas(respostas, aprovado) {
+        for (const [questao, valor] of Object.entries(respostas)) {
+            const input = document.querySelector(`input[name="${questao}"][value="${valor}"]`);
+            if (input) {
+                input.checked = true;
+            }
+        }
+
+        if (aprovado) {
+            document.querySelectorAll(".questionario input").forEach(input => {
+                input.disabled = true; // trava os campos
+            });
+        }
+    }
+</script>
+
 
 <body>
     <header class="header">
