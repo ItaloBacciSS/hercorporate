@@ -188,14 +188,13 @@
         <div class="header-login">
             {% if usuario %}
             <a href="/logout" class="login-btn">
-                <span class="nome">{{ usuario[1] }}</span>
+                <span class="nome">{{ usuario.nome }}</span>
                 <span class="logout">Logout</span>
             </a>
             {% else %}
             <a href="/login" class="login-btn">Login</a>
             {% endif %}
         </div>
-
 
     </header>
 
