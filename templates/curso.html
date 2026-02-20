@@ -57,7 +57,7 @@
 ========================= -->
 <script>
     function corrigirQuestionarioModulo(botao) {
-        const form = botao.closest('.questionario');
+        const form = botao.closest('form.questionario');
         const total = parseInt(form.dataset.total);
         const moduloAtual = parseInt(form.dataset.modulo);
 
@@ -78,10 +78,9 @@
                     resultado.textContent = "✅ Aprovado! Próximo módulo liberado.";
                     resultado.style.color = "green";
 
-                    // 🔹 Travar os campos do questionário
-                    form.querySelectorAll("input").forEach(input => {
-                        input.disabled = true;
-                    });
+                    // 🔹 Travar os campos do questionário 
+                    form.querySelectorAll("input[type=radio], input[type=checkbox]").forEach
+                        (input => { input.disabled = true; });
 
                     liberarProximoModulo(data.proximo_modulo);
                 } else {
