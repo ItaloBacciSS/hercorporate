@@ -57,16 +57,26 @@
 ========================= -->
 <script>
     function corrigirQuestionarioModulo(botao) {
-        const form = botao.closest('form.questionario');
-        const total = parseInt(form.dataset.total);
-        const moduloAtual = parseInt(form.dataset.modulo);
+        // tenta pegar o form diretamente; se não achar, procura um form dentro do details mais próximo
+        let form = botao.closest('form.questionario');
+        if (!form) {
+            const details = botao.closest('.questionario');
+            form = details ? details.querySelector('form.questionario') : null;
+        }
 
-        // Corrige visualmente e conta acertos
+        console.log('form encontrado em corrigirQuestionarioModulo:', form);
+        if (!form) {
+            console.error('Formulário questionario não encontrado. Verifique a estrutura HTML.');
+            return;
+        }
+
+        const total = parseInt(form.dataset.total, 10);
+        const moduloAtual = parseInt(form.dataset.modulo, 10);
+
         const corretas = avaliarQuestoes(form);
         const nota = (corretas / total) * 100;
         const resultado = form.querySelector('.resultado');
 
-        // Envia progresso ao backend
         fetch("/salvar-progresso-modulo", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -74,19 +84,31 @@
         })
             .then(res => res.json())
             .then(data => {
-                if (data.aprovado) {
+                console.log('Resposta do backend:', data);
+
+                const aprovado = (data.aprovado === true || data.aprovado === "true");
+
+                if (aprovado) {
                     resultado.textContent = "✅ Aprovado! Próximo módulo liberado.";
                     resultado.style.color = "green";
 
-                    // 🔹 Travar os campos do questionário 
-                    form.querySelectorAll("input[type=radio], input[type=checkbox]").forEach
-                        (input => { input.disabled = true; });
+                    // trava apenas os inputs desse form
+                    const inputs = form.querySelectorAll("input[type=radio], input[type=checkbox], input[type=text], textarea, select");
+                    console.log('Desabilitando inputs encontrados:', inputs.length);
+                    inputs.forEach(input => input.disabled = true);
 
+                    // opcional: adiciona classe visual ao form/modulo
+                    form.classList.add('concluido');
                     liberarProximoModulo(data.proximo_modulo);
                 } else {
                     resultado.textContent = "❌ Reprovado. Você pode tentar novamente.";
                     resultado.style.color = "red";
                 }
+            })
+            .catch(err => {
+                console.error('Erro na requisição /salvar-progresso-modulo:', err);
+                resultado.textContent = "Erro ao salvar progresso. Tente novamente.";
+                resultado.style.color = "orange";
             });
     }
 </script>
