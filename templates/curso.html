@@ -168,30 +168,6 @@
     });
 </script>
 
-<script>
-    const resultado = await resp.json();
-    console.log(resultado);
-
-    if (resultado.aprovado) {
-        // percorre todas as questões
-        document.querySelectorAll(".questao").forEach(questao => {
-            const correta = questao.querySelector("input[data-correta=true]");
-            if (correta) {
-                const texto = correta.parentElement.textContent.trim();
-                const divResposta = document.createElement("div");
-                divResposta.classList.add("resposta-correta");
-                divResposta.textContent = "Resposta correta: " + texto;
-                questao.appendChild(divResposta);
-            }
-        });
-
-        // trava os inputs
-        document.querySelectorAll(".questionario input").forEach(input => {
-            input.disabled = true;
-        });
-    }
-</script>
-
 
 
 <body>
