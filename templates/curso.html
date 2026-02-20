@@ -9,18 +9,19 @@
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" href="/static/css/curso.css">
 
-    <!-- Fonte provisória (vamos trocar depois) -->
+    <!-- Fonte provisória -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
+
+<!-- =========================
+     SCRIPT: Avaliar questões
+========================= -->
 <script>
     function avaliarQuestoes(form) {
-
         let corretas = 0;
-
         const questoes = form.querySelectorAll(".questao");
 
         questoes.forEach((questao) => {
-
             // limpa estados anteriores
             questao.classList.remove("correta", "incorreta");
             const feedbackAntigo = questao.querySelector(".feedback");
@@ -31,7 +32,6 @@
 
             if (marcada && marcada.dataset.correta === "true") {
                 corretas++;
-
                 questao.classList.add("correta");
 
                 const fb = document.createElement("div");
@@ -52,34 +52,31 @@
     }
 </script>
 
+<!-- =========================
+     SCRIPT: Corrigir questionário
+========================= -->
 <script>
     function corrigirQuestionarioModulo(botao) {
-
         const form = botao.closest('.questionario');
         const total = parseInt(form.dataset.total);
         const moduloAtual = parseInt(form.dataset.modulo);
 
-        // 🔹 Corrige visualmente e conta acertos
+        // Corrige visualmente e conta acertos
         const corretas = avaliarQuestoes(form);
-
         const nota = (corretas / total) * 100;
         const resultado = form.querySelector('.resultado');
 
-        // 🔹 Envia progresso ao backend
+        // Envia progresso ao backend
         fetch("/salvar-progresso-modulo", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                modulo: moduloAtual,
-                nota: nota
-            })
+            body: JSON.stringify({ modulo: moduloAtual, nota: nota })
         })
             .then(res => res.json())
             .then(data => {
                 if (data.aprovado) {
                     resultado.textContent = "✅ Aprovado! Próximo módulo liberado.";
                     resultado.style.color = "green";
-
                     liberarProximoModulo(data.proximo_modulo);
                 } else {
                     resultado.textContent = "❌ Reprovado. Você pode tentar novamente.";
@@ -89,14 +86,14 @@
     }
 </script>
 
+<!-- =========================
+     SCRIPT: Liberar próximo módulo
+========================= -->
 <script>
     function liberarProximoModulo(numeroModulo) {
         if (!numeroModulo) return;
 
-        const modulo = document.querySelector(
-            `.modulo[data-modulo="${numeroModulo}"]`
-        );
-
+        const modulo = document.querySelector(`.modulo[data-modulo="${numeroModulo}"]`);
         if (!modulo) return;
 
         modulo.classList.remove('bloqueado');
@@ -113,12 +110,14 @@
     }
 </script>
 
-<script>function carregarRespostas(respostas, aprovado) {
+<!-- =========================
+     SCRIPT: Carregar respostas salvas
+========================= -->
+<script>
+    function carregarRespostas(respostas, aprovado) {
         for (const [questao, valor] of Object.entries(respostas)) {
             const input = document.querySelector(`input[name="${questao}"][value="${valor}"]`);
-            if (input) {
-                input.checked = true;
-            }
+            if (input) input.checked = true;
         }
 
         if (aprovado) {
@@ -129,6 +128,9 @@
     }
 </script>
 
+<!-- =========================
+     SCRIPT: Enviar respostas ao backend
+========================= -->
 <script>
     document.querySelector(".questionario").addEventListener("submit", async function (e) {
         e.preventDefault();
@@ -141,9 +143,7 @@
         const respostas = [];
         for (let i = 1; i <= total; i++) {
             const selecionado = form.querySelector(`input[name="q${i}"]:checked`);
-            if (selecionado) {
-                respostas.push(`q${i}=${selecionado.value}`);
-            }
+            if (selecionado) respostas.push(`q${i}=${selecionado.value}`);
         }
         const respostasStr = respostas.join(";");
 
@@ -168,17 +168,18 @@
     });
 </script>
 
-
-
 <body>
+    <!-- =========================
+         HEADER
+    ========================= -->
     <header class="header">
-        <!-- Logo / Marca -->
+        <!-- Logo -->
         <a href="/" class="logo">
             <img src="/static/imagens/logo.png" alt="Logo">
             <span>Her Corporate</span>
         </a>
 
-        <!-- Navegação central -->
+        <!-- Navegação -->
         <nav class="nav-center">
             <a href="/sobre" class="nav-link">Sobre</a>
             <a href="/curso" class="nav-link">Cursos</a>
@@ -195,69 +196,49 @@
             <a href="/login" class="login-btn">Login</a>
             {% endif %}
         </div>
-
     </header>
 
-
+    <!-- =========================
+         CONTEÚDO DO CURSO
+    ========================= -->
     <section class="curso-page">
 
-        <!-- =========================
-         WRAPPER CENTRAL
-         Centraliza o conteúdo na tela
-         e cria margem superior e inferior
-        ========================== -->
+        <!-- Hero section -->
         <section class="curso-hero-wrapper">
-
-            <!-- =========================
-             QUADRO PRINCIPAL
-             Estrutura idêntica ao da Home:
-             imagem à esquerda e conteúdo à direita
-            ========================== -->
             <div class="curso-hero">
-
-                <!-- IMAGEM DO LADO ESQUERDO -->
+                <!-- Imagem esquerda -->
                 <div class="curso-hero-img">
                     <img src="/static/imagens/mulhercurso.avif" alt="Introdução ao curso">
                 </div>
 
-                <!-- CONTEÚDO DO LADO DIREITO -->
+                <!-- Conteúdo direita -->
                 <div class="curso-hero-content">
-
-                    <!-- TÍTULO PRINCIPAL -->
                     <h1>English for Women in the Workplace: Corporate Language & Awareness of Microaggressions</h1>
 
-                    <!-- BLOCO DE SUBTÍTULOS LADO A LADO -->
+                    <!-- Subtítulos lado a lado -->
                     <div class="curso-sub-row">
-
                         <div class="curso-sub-bloco">
                             <h3>8</h3>
-                            <p>
-                                semanas
-                            </p>
+                            <p>semanas</p>
                         </div>
-
                         <div class="curso-sub-bloco">
                             <h3>4</h3>
-                            <p>
-                                módulos </p>
+                            <p>módulos</p>
                         </div>
-
                     </div>
 
-
-                    <!-- PARÁGRAFO COM IMAGEM DE TÓPICO -->
+                    <!-- Parágrafo com ícone -->
                     <div class="curso-paragrafo-topico">
                         <img src="/static/imagens/certificado.png" alt="Indicador de tópico">
-                        <p>
-                            Obtenha um certificado ao concluir o curso!
-                        </p>
+                        <p>Obtenha um certificado ao concluir o curso!</p>
                     </div>
-
                 </div>
             </div>
         </section>
 
-        <!-- GUIA DE BOAS VINDAS -->
+        <!-- =========================
+             MÓDULO INTRODUTÓRIO
+        ========================= -->
         <details class="modulo">
             <summary class="modulo-header">
                 <span>Guia de Boas Vindas</span>
@@ -269,60 +250,45 @@
                             Microaggressions</i>.</b></p>
                 <p>Este curso foi desenvolvido por mulheres e para mulheres, com o objetivo de fortalecer a comunicação
                     em língua inglesa no ambiente corporativo e acadêmico, ao mesmo tempo em que promove a
-                    conscientização sobre microagressões e dinâmicas de poder presentes nesses contextos. Este capítulo
-                    introdutório foi elaborado para orientá-la quanto ao funcionamento do curso e à organização da
-                    plataforma. Aqui você encontrará informações sobre como navegar pelo site, realizar o acesso aos
-                    materiais, realização de atividades avaliativas e acompanhamento de progresso.</p>
+                    conscientização sobre microagressões e dinâmicas de poder presentes nesses contextos.</p>
                 <p>O curso está estruturado em quatro módulos progressivos, organizados de forma a integrar
                     desenvolvimento linguístico e consciência crítica sobre comunicação no ambiente corporativo.</p>
+
                 <ul>
-                    <li>Para melhor uso desta plataforma recomenda-se a dedicação média de sete a oito horas por
-                        semana – podendo ser dividida em 1 hora por dia de curso.</li>
-                    <li>Todas as atividades podem ser realizadas no seu próprio ritmo.</li>
-                    <li>Antes de iniciar o Capítulo 1, sugerimos que explore esta seção com atenção e realize o
-                        diagnóstico inicial.</li>
+                    <li>Dedicação média de 7 a 8 horas por semana (aprox. 1h por dia).</li>
+                    <li>Atividades realizadas no seu próprio ritmo.</li>
+                    <li>Antes do Capítulo 1, explore esta seção e realize o diagnóstico inicial.</li>
                 </ul>
+
                 <h2>Organização do Curso</h2>
-                <p>Este curso foi idealizado no formato de MOOC (Massive Open Online Course) sendo ofertado de maneira
-                    totalmente online e assíncrona. Ele está organizado em módulos sequenciais, que devem ser realizados
-                    de forma progressiva. Cada módulo contempla:</p>
+                <p>Formato MOOC, totalmente online e assíncrono. Cada módulo contempla:</p>
                 <ul>
                     <li>Leitura de textos teóricos;</li>
                     <li>Análise de exemplos práticos;</li>
                     <li>Assistir videoaulas;</li>
-                    <li>Exercitar habilidade de escuta por meio dos áudios;</li>
-                    <li>Atividade e questionários online com feedback automático.</li>
+                    <li>Exercitar habilidade de escuta por meio de áudios;</li>
+                    <li>Atividades e questionários online com feedback automático.</li>
                 </ul>
-                <p>A carga horária para conclusão de curso é de 8 semanas. Para o melhor aproveitamento do conteúdo é
-                    sugerido que a aluna separe um período de 1 hora diária para estudar e tirar proveito de todo
-                    conteúdo e atividades propostas. </p>
-                <p>É importante ressaltar que o curso é destinado a mulheres que estão inseridas ou tentando adentram no
-                    mercado de trabalho por isso é compreensível a necessidade de flexibilização e este curso foi
-                    elaborado com esse requisito em mente.</p>
+
+                <p>Carga horária: 8 semanas. Sugestão: 1h diária para melhor aproveitamento.</p>
+
                 <h2>Navegabilidade</h2>
-                <p>O conteúdo do curso estará disponível exclusivamente nesta plataforma com cada módulo contendo
-                    material de estudo, instruções claras para realização de atividades, bem como respectivos
-                    questionários que podem ser respondidos no próprio navegador.</p>
-                <p>Após o envio das atividades objetivas, o feedback será disponibilizado automaticamente, permitindo
-                    que você acompanhe seu desempenho e retome os conteúdos sempre que necessário.</p>
+                <p>O conteúdo estará disponível exclusivamente nesta plataforma, com cada módulo contendo material de
+                    estudo, instruções e questionários com feedback automático.</p>
+
                 <h2>Recomendações Técnicas</h2>
-                <p>Para que possa aproveitar 100% do curso, recomenda-se o acesso por meio de aparelho computador ou
-                    notebook, especialmente durante leitura dos textos, vídeos e realização das atividades. Embora seja
-                    possível acessar o conteúdo por dispositivos móveis, telas maiores favorecem a concentração, a
-                    organização das informações e a experiência de aprendizagem. Em adição a isso, é importante garantir
-                    uma conexão estável com a internet e reservar momentos específicos da semana para que possa se
-                    dedicar ao curso.</p>
-                <h2>Sua Participação no Curso</h2>
-                <p>A proposta do curso envolve não apenas o desenvolvimento de habilidades linguísticas, mas também a
-                    reflexão crítica sobre situações reais vivenciadas por mulheres no ambiente profissional. Espera-se
-                    que você participe de forma ativa, relacionando os conteúdos às suas vivências individuais e assim
-                    conseguir explorar estratégias linguísticas que possam ser aplicadas em contextos reais de trabalho.
-                </p>
+                <p>Recomenda-se uso de computador ou notebook para melhor experiência, além de conexão estável.</p>
+
+                <h2>Sua Participação</h2>
+                <p>O curso envolve desenvolvimento linguístico e reflexão crítica sobre situações reais vivenciadas por
+                    mulheres no ambiente profissional. Espera-se participação ativa, relacionando conteúdos às vivências
+                    individuais.</p>
             </div>
         </details>
 
-
-        <!-- MÓDULO 1 -->
+        <!-- =========================
+        MÓDULO 1
+        ========================= -->
         <details class="modulo">
             <!-- Header do módulo -->
             <summary class="modulo-header">
@@ -334,8 +300,8 @@
             <div class="modulo-conteudo">
 
                 <!-- =========================
-             INTRODUÇÃO
-             ========================= -->
+                CAPÍTULO: Introdução
+                ========================= -->
                 <details class="capitulo">
                     <!-- Cabeçalho do capítulo -->
                     <summary class="capitulo-header">
@@ -346,71 +312,44 @@
                     <!-- Conteúdo do capítulo -->
                     <div class="capitulo-conteudo">
                         <p>Desde os primórdios, o mercado de trabalho é permeado por relações complexas que vão muito
-                            além das
-                            competências técnicas ou da produtividade. Nele, dinâmicas de poder, gênero e linguagem se
-                            fazem
-                            presentes ressaltando as dinâmicas estruturais que regem as relações sociais em sociedade e
-                            moldando
-                            oportunidades, comportamentos e percepções. Embora avanços importantes tenham sido
-                            alcançados nas
-                            últimas décadas de modo a transformar o ambiente de trabalho em espaço mais diversos, as
-                            desigualdades estruturais persistem em ocorrer, um triste reflexo tanto das interações
-                            cotidianas
-                            quanto das políticas institucionais. </p>
-                        <p>A distribuição desigual de oportunidades, a naturalização de comportamentos associados a
-                            identidades
-                            de gênero e os regimes discursivos que orientam práticas institucionais revelam que o
-                            trabalho não é
-                            um espaço neutro, mas um território atravessado por disputas simbólicas e materiais. A
-                            análise
-                            dessas dimensões tem a capacidade de esclarecer os mecanismos que sustentam tais
-                            desigualdades, e,
-                            no caso deste curso, proporcionar medidas de intervenção para coibir diversos tipos de
-                            microagressões e promover práticas mais justas e inclusivas no ambiente profissional.</p>
-                        <p>Um relatório conduzido pelo Programa das Nações Unidas para o Desenvolvimento (Pnud) foi
-                            divulgado em
-                            junho de 2023 com o título <cite>“Índice de Normas Sociais de Gênero”</cite>, revela que 90%
-                            dos
-                            entrevistados
-                            têm algum tipo de preconceito contra as mulheres. O estudo contou com pesquisa abrangendo
-                            85% da
-                            população mundial e ainda aponta que quase metade dos entrevistados acredita que os homens
-                            são
-                            melhores como líderes políticos do que mulheres. Além disso, duas em cada cinco pessoas
-                            acreditam
-                            que eles também se saem melhor como executivos. Esses dados salientam como essa questão
-                            advém de um
-                            problema estrutural da sociedade e que tem seus efeitos no âmbito particular pela presença
-                            de
-                            discursos organizacionais que reforçam estereótipos, comunicações internas com vieses
-                            linguísticos
-                            discriminatórios e desqualificação da mulher, as colocando em posições de invisibilidade e
-                            subserviência em sua inserção no mercado de trabalho.</p>
-                        <p>Este curso tem como enfoque como esse preconceito atua e é disseminado por meio do discurso e
-                            possui
-                            a linguagem como ferramenta de intimidação e coerção, algo que pode se tornar ainda mais
-                            complexo de
-                            ser identificado e combatido quando se está em ambiente fora da língua nativa. </p>
-                        <p>O termo <b>“microagressões”</b>, cunhado pelo psiquiatra Chester M. Pierce nos anos 1970, se
-                            refere a
-                            comentários, perguntas e pequenas ações hostis que questionam ou desqualificam, de maneira
-                            velada e
-                            rotineira, pessoas ou grupos de minorias sociais. Tais comentários preconceituosos em tom de
-                            piada,
-                            como <q>ela deve estar de TPM</q>, <q>só podia ser mulher</q> ou <q>prefiro chefe homem</q>,
-                            são recorrentes no dia a dia de muitas brasileiras e podem machucá-las mais do que se
-                            imagina. </p>
-                        <p>Por isso, neste capítulo conheceremos alguns termos que nomeiam diferentes tipos de
-                            microagressões
-                            presentes nesse ambiente e como podem se manifestar, de modo a entender como o machismo
-                            opera em
-                            situações rotineiras que podem estar tão enraizadas, ocorrendo até mesmo de forma velada.
-                            Vamos lá!
-                        </p>
+                            além das competências técnicas ou da produtividade. Nele, dinâmicas de poder, gênero e
+                            linguagem se fazem presentes, ressaltando as dinâmicas estruturais que regem as relações
+                            sociais e moldando oportunidades, comportamentos e percepções.</p>
 
+                        <p>Embora avanços importantes tenham sido alcançados nas últimas décadas, as desigualdades
+                            estruturais persistem, refletindo tanto interações cotidianas quanto políticas
+                            institucionais.</p>
+
+                        <p>A distribuição desigual de oportunidades, a naturalização de comportamentos associados a
+                            identidades de gênero e os regimes discursivos que orientam práticas institucionais revelam
+                            que o trabalho não é um espaço neutro, mas atravessado por disputas simbólicas e materiais.
+                            A análise dessas dimensões ajuda a esclarecer os mecanismos que sustentam tais desigualdades
+                            e, neste curso, a propor medidas de intervenção para coibir microagressões e promover
+                            práticas mais justas e inclusivas.</p>
+
+                        <p>Um relatório do Programa das Nações Unidas para o Desenvolvimento (PNUD), divulgado em junho
+                            de 2023 com o título <cite>“Índice de Normas Sociais de Gênero”</cite>, revelou que 90% dos
+                            entrevistados têm algum tipo de preconceito contra mulheres. O estudo, abrangendo 85% da
+                            população mundial, apontou que quase metade acredita que homens são melhores líderes
+                            políticos e executivos do que mulheres. Esses dados evidenciam como o problema é estrutural
+                            e se manifesta em discursos organizacionais que reforçam estereótipos e desqualificam
+                            mulheres.</p>
+
+                        <p>Este curso foca em como o preconceito atua e é disseminado por meio do discurso, usando a
+                            linguagem como ferramenta de intimidação e coerção — algo ainda mais complexo em ambientes
+                            fora da língua nativa.</p>
+
+                        <p>O termo <b>“microagressões”</b>, cunhado pelo psiquiatra Chester M. Pierce nos anos 1970,
+                            refere-se a comentários, perguntas e pequenas ações hostis que desqualificam, de maneira
+                            velada e rotineira, pessoas ou grupos de minorias sociais. Exemplos comuns incluem frases
+                            como <q>ela deve estar de TPM</q>, <q>só podia ser mulher</q> ou <q>prefiro chefe homem</q>,
+                            que podem causar impactos profundos.</p>
+
+                        <p>Neste capítulo, conheceremos termos que nomeiam diferentes tipos de microagressões presentes
+                            no ambiente de trabalho e como se manifestam, para entender como o machismo opera em
+                            situações rotineiras, muitas vezes de forma velada.</p>
                     </div>
                 </details>
-
 
                 <!-- =========================
                 CAPÍTULO 1
@@ -431,32 +370,37 @@
                             valores culturais, dispositivos legais e relações de poder que moldam quem acessa
                             determinadas ocupações, em quais condições e com quais possibilidades de reconhecimento e
                             progressão.</p>
+
                         <p>Dessa forma, o mercado de trabalho não se configura apenas como um espaço de troca econômica,
                             mas como um ambiente social profundamente marcado por valores, normas e hierarquias que
                             refletem estruturas históricas de poder. As organizações, ainda que se apresentem como
                             neutras ou meritocráticas, são atravessadas por relações sociais que reproduzem
-                            desigualdades de gênero, raça, classe e outras marcadores sociais.
-                        </p>
+                            desigualdades de gênero, raça, classe e outros marcadores sociais.</p>
+
                         <p>Mesmo com a crescente inserção das mulheres em diferentes setores profissionais, sua
                             participação ainda ocorre de forma desigual, especialmente em cargos de liderança, tomada de
                             decisão e áreas tradicionalmente associadas ao poder institucional. Barreiras simbólicas,
                             como estereótipos de gênero, expectativas comportamentais e julgamentos implícitos sobre
                             competência e autoridade, continuam a limitar oportunidades e impactar trajetórias
                             profissionais femininas.</p>
+
                         <p>Além disso, práticas organizacionais aparentemente neutras, como critérios de avaliação,
                             padrões de comunicação e cultura corporativa, podem reforçar exclusões sutis, tornando o
                             ambiente de trabalho um espaço onde desigualdades são mantidas não apenas por regras
                             explícitas, mas também por interações cotidianas e discursos naturalizados.</p>
+
                         <p>Além das desigualdades relacionadas ao acesso e à permanência no mercado de trabalho, é
                             importante destacar que mulheres frequentemente enfrentam uma sobrecarga simbólica e
                             emocional em seus ambientes profissionais. Espera-se delas comportamentos específicos, como
                             cordialidade constante, flexibilidade emocional e disposição para tarefas de cuidado ou
                             mediação de conflitos, exigências que raramente recaem com a mesma intensidade sobre homens.
                         </p>
+
                         <p>Outro aspecto relevante diz respeito à noção de meritocracia, amplamente difundida no
                             discurso organizacional. Embora apresentada como princípio de justiça e igualdade, a
                             meritocracia tende a desconsiderar desigualdades estruturais pré-existentes, naturalizando
-                            diferenças de desempenho como resultado exclusivo de esforço individual. </p>
+                            diferenças de desempenho como resultado exclusivo de esforço individual.</p>
+
                         <p>Dessa forma, ignora-se que mulheres frequentemente partem de posições desiguais, enfrentando
                             obstáculos simbólicos e institucionais que impactam suas oportunidades de reconhecimento e
                             ascensão profissional.</p>
@@ -1452,8 +1396,8 @@
 
         </main>
         <!-- =========================
-     FOOTER
-========================= -->
+        FOOTER
+        ========================= -->
         <footer class="site-footer">
             <div class="footer-left">
                 &copy; 2026 Her Corporate
@@ -1470,8 +1414,6 @@
                 </a>
             </div>
         </footer>
-
-
 </body>
 
 </html>

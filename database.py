@@ -1,6 +1,9 @@
 import os
 import psycopg2
 
+# -----------------------------
+# Conexão e inicialização
+# -----------------------------
 def get_connection():
     url = os.environ.get("DATABASE_URL")
     if not url:
@@ -10,6 +13,7 @@ def get_connection():
         url = url.replace("postgres://", "postgresql://", 1)
 
     return psycopg2.connect(url)
+
 
 def criar_tabelas():
     conn = get_connection()
@@ -33,7 +37,7 @@ def criar_tabelas():
             modulo INTEGER NOT NULL,
             nota REAL NOT NULL,
             aprovado BOOLEAN NOT NULL,
-            respostas JSONB,
+            respostas TEXT,
             UNIQUE (usuario_id, modulo)
         );
     """)
@@ -42,6 +46,10 @@ def criar_tabelas():
     cur.close()
     conn.close()
 
+
+# -----------------------------
+# Usuários
+# -----------------------------
 def registrar_usuario(nome, email, senha):
     conn = get_connection()
     cur = conn.cursor()
@@ -59,6 +67,7 @@ def registrar_usuario(nome, email, senha):
         cur.close()
         conn.close()
 
+
 def validar_login(email, senha):
     conn = get_connection()
     cur = conn.cursor()
@@ -67,6 +76,7 @@ def validar_login(email, senha):
     cur.close()
     conn.close()
     return usuario
+
 
 def buscar_usuario_por_id(usuario_id):
     conn = get_connection()
@@ -79,13 +89,17 @@ def buscar_usuario_por_id(usuario_id):
         return {"id": usuario[0], "nome": usuario[1], "email": usuario[2]}
     return None
 
+
+# -----------------------------
+# Progresso do curso
+# -----------------------------
 def salvar_progresso_modulo(usuario_id, modulo, nota, respostas=None):
     aprovado = nota >= 60
     conn = get_connection()
     cur = conn.cursor()
 
     # transforma dict em string "q1=b;q2=c;q3=a"
-    respostas_str = ";".join([f"{k}={v}" for k,v in respostas.items()]) if respostas else None
+    respostas_str = ";".join([f"{k}={v}" for k, v in respostas.items()]) if respostas else None
 
     cur.execute("""
         INSERT INTO progresso_modulo (usuario_id, modulo, nota, aprovado, respostas)
@@ -108,4 +122,3 @@ def modulos_aprovados(usuario_id):
     cur.close()
     conn.close()
     return modulos
-

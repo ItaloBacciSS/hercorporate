@@ -1,4 +1,6 @@
-/* TRAVA O SCROLL E REMOVE MARGENS */
+/* =========================
+   RESET + BODY
+========================= */
 body, html {
     margin: 0;
     padding: 0;
@@ -8,7 +10,9 @@ body, html {
     background-color: #ffffff;
 }
 
-/* CENTRAR LOGIN NA TELA */
+/* =========================
+   MAIN LOGIN
+========================= */
 .login-main {
     display: flex;
     flex-direction: column;
@@ -17,40 +21,34 @@ body, html {
     height: 100vh; /* ocupa toda a altura da tela */
     text-align: center;
 }
-
-/* TÍTULO */
 .login-main h1 {
     font-size: 32px;
     color: var(--roxo-principal);
     margin-bottom: 16px;
 }
-
-/* PARÁGRAFO */
 .login-main p {
     font-size: 14px;
     color: var(--roxo-principal);
     margin-bottom: 24px;
 }
-
 .login-main .registro-link {
     color: var(--roxo-principal);
     text-decoration: none;
     font-weight: 600;
 }
-
 .login-main .registro-link:hover {
     text-decoration: underline;
 }
 
-/* FORMULÁRIO */
+/* =========================
+   FORMULÁRIO
+========================= */
 .login-form {
     display: flex;
     flex-direction: column;
     gap: 16px;
     width: 280px; /* largura fixa para os campos */
 }
-
-/* CAMPOS */
 .login-form input {
     padding: 12px 14px;
     border-radius: 8px;
@@ -58,7 +56,9 @@ body, html {
     font-size: 16px;
 }
 
-/* BOTÃO */
+/* =========================
+   BOTÃO
+========================= */
 .login-btn {
     padding: 12px 20px;
     border-radius: 22px;
@@ -69,12 +69,14 @@ body, html {
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
 .login-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0,0,0,0.25);
 }
 
+/* =========================
+   MENSAGEM DE ERRO
+========================= */
 .erro-msg {
     color: var(--roxo-principal);
     padding: 12px 16px;

@@ -10,6 +10,9 @@ from database import (
 )
 import os
 
+# -----------------------------
+# Configuração da aplicação
+# -----------------------------
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "chave_fallback_insegura")
 
@@ -18,12 +21,17 @@ try:
 except Exception as e:
     print(f"Erro ao criar tabelas: {e}")
 
+
+# -----------------------------
+# Rotas principais
+# -----------------------------
 @app.route("/")
 def home():
     usuario = None
     if "usuario_id" in session:
         usuario = buscar_usuario_por_id(session["usuario_id"])
     return render_template("home.html", usuario=usuario)
+
 
 @app.route("/sobre")
 def sobre():
@@ -33,6 +41,9 @@ def sobre():
     return render_template("sobre.html", usuario=usuario)
 
 
+# -----------------------------
+# Autenticação
+# -----------------------------
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -45,6 +56,7 @@ def login():
         else:
             return render_template("login.html", erro="Email ou senha incorretos")
     return render_template("login.html")
+
 
 @app.route("/registro", methods=["GET", "POST"])
 def registro():
@@ -60,11 +72,16 @@ def registro():
             return render_template("registro.html", erro="Email já cadastrado")
     return render_template("registro.html")
 
+
 @app.route("/logout")
 def logout():
     session.pop("usuario_id", None)
     return redirect("/login")
 
+
+# -----------------------------
+# Curso e progresso
+# -----------------------------
 @app.route("/curso")
 def curso():
     if "usuario_id" not in session:
@@ -77,12 +94,21 @@ def curso():
     # Buscar respostas salvas do módulo atual
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute("SELECT modulo, respostas, aprovado FROM progresso_modulo WHERE usuario_id=%s", (usuario_id,))
+    cur.execute(
+        "SELECT modulo, respostas, aprovado FROM progresso_modulo WHERE usuario_id=%s",
+        (usuario_id,)
+    )
     progresso = cur.fetchall()
     cur.close()
     conn.close()
 
-    return render_template("curso.html", modulos_aprovados=aprovados, usuario=usuario, progresso=progresso)
+    return render_template(
+        "curso.html",
+        modulos_aprovados=aprovados,
+        usuario=usuario,
+        progresso=progresso
+    )
+
 
 @app.route("/salvar-progresso-modulo", methods=["POST"])
 def salvar_progresso_modulo_route():
@@ -106,6 +132,10 @@ def salvar_progresso_modulo_route():
         "proximo_modulo": modulo + 1 if aprovado else None
     })
 
+
+# -----------------------------
+# Inicialização
+# -----------------------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)

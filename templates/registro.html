@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - Her Corporate</title>
+
+    <!-- CSS -->
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" href="/static/css/login.css">
 </head>
-
 <body>
-
+    <!-- =========================
+         MAIN
+    ========================= -->
     <main class="login-main">
         <h1>Registre-se</h1>
 
+        <!-- Link para login -->
         <p>
             Já tem conta?
             <a href="/login" class="registro-link">Login</a>
         </p>
 
+        <!-- Formulário de registro -->
         <form action="/registro" method="POST" class="login-form">
             <input type="text" name="nome" placeholder="Nome completo" required>
             <input type="email" name="email" placeholder="Email" required>
@@ -26,13 +30,10 @@
             <button type="submit" class="login-btn">Registrar</button>
         </form>
 
-        <!-- MENSAGEM DE ERRO AQUI -->
+        <!-- Mensagem de erro -->
         {% if erro %}
-        <div class="erro-msg">{{ erro }}</div>
+            <div class="erro-msg">{{ erro }}</div>
         {% endif %}
-        
     </main>
-
 </body>
-
 </html>

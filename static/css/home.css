@@ -5,12 +5,10 @@
     text-align: center;
     margin-top: 100px;
 }
-
 .home-content h1 {
     font-size: 36px;
     color: var(--roxo-principal);
 }
-
 .home-content p {
     margin-top: 10px;
     font-size: 18px;
@@ -22,145 +20,115 @@
 ========================= */
 .home-main {
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* garante coluna para responsividade */
+    align-items: center;
     margin-top: 80px;
 }
 
-/* RETÂNGULO CENTRAL */
+/* Box central */
 .home-box {
     width: 85%;
     max-width: 1200px;
-    height: 520px; /* ← AUMENTA A ALTURA */
-
+    height: 520px;
     background-color: #ffffff;
     border-radius: 14px;
-
     display: flex;
     overflow: hidden;
-
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-/* LADO ESQUERDO (35%) */
+/* Lado esquerdo */
 .home-left {
     width: 66.8%;
-    background-color: #F3D6C6
-;
-
+    background-color: #F3D6C6;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* RETÂNGULO INTERNO */
+/* Retângulo interno */
 .home-left-inner {
-    width: 50%;          /* menos largo */
+    width: 50%;
     background-color: var(--roxo-principal);
     padding: 28px;
     border-radius: 12px;
-
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* distribui texto e botão verticalmente */
-    
-    height: 400px;       /* mais alto */
+    justify-content: space-between;
+    height: 400px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
-
 .home-left-inner h2 {
     color: whitesmoke;
     font-size: 30px;
     margin-bottom: 12px;
 }
-
 .home-left-inner p {
     color: whitesmoke;
     font-size: 20px;
     margin-bottom: 24px;
 }
 
-/* BOTÃO HOME */
+/* Botão home */
 .home-btn {
     display: block;
     width: fit-content;
     margin: 0 auto;
-
-    background-color: #F3D6C6; /* bege */
-    color: var(--roxo-principal); /* roxo */
-
+    background-color: #F3D6C6;
+    color: var(--roxo-principal);
     padding: 10px 24px;
     border-radius: 22px;
-
     text-decoration: none;
     font-weight: 600;
-
-    transition: 
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background-color 0.2s ease,
-        color 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease,
+                background-color 0.2s ease, color 0.2s ease;
 }
-
 .home-btn:hover {
     background-color: var(--roxo-principal);
     color: #ffffff;
-
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
 }
-
 .home-btn:active {
     transform: translateY(-1px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+/* Lado direito */
 .home-right {
     width: 65%;
     display: flex;
-    justify-content: flex-end; /* imagem vai pro canto direito */
-    align-items: stretch;      /* ocupa toda altura do card */
-    overflow: hidden;          /* evita scroll */
+    justify-content: flex-end;
+    align-items: stretch;
+    overflow: hidden;
 }
-
 .home-right img {
-    width: 800px;          /* mantém proporção horizontal */
-    height: 100%;         /* preenche toda altura do container */
+    width: 800px;
+    height: 100%;
 }
 
 /* =========================
    SEÇÃO INFERIOR
 ========================= */
-/* GARANTE QUE HOME-MAIN SEJA COLUNA */
-.home-main {
-    display: flex;
-    flex-direction: column; /* ← importante */
-    align-items: center;
-    margin-top: 80px;
-}
-
-/* SEÇÃO INFERIOR */
 .home-bottom {
     text-align: center;
     margin-top: 60px;
     padding: 20px;
 }
-
 .home-bottom img {
     max-width: 100px;
     height: auto;
     margin-bottom: 20px;
 }
-
 .home-bottom h2 {
     font-size: 28px;
     color: var(--roxo-principal);
     margin-bottom: 12px;
 }
-
 .home-bottom p {
     font-size: 16px;
     color: var(--roxo-principal);
-    max-width: 850px; /* aumenta de 600px para 800px */
+    max-width: 850px;
     margin: 0 auto;
     line-height: 1.5;
 }
@@ -173,9 +141,8 @@
     justify-content: center;
     gap: 30px;
     margin-top: 60px;
-    flex-wrap: wrap; /* permite responsividade */
+    flex-wrap: wrap;
 }
-
 .card {
     background-color: #ffffff;
     border-radius: 12px;
@@ -188,33 +155,27 @@
     align-items: center;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
 .card img {
     width: 100%;
     height: auto;
     border-radius: 10px;
     margin-bottom: 15px;
 }
-
 .card h3 {
     font-size: 20px;
     color: var(--roxo-principal);
     margin-bottom: 6px;
 }
-
 .card h4 {
     font-size: 16px;
     color: #555;
     margin-bottom: 12px;
 }
-
 .card p {
     font-size: 14px;
     color: #555;
     line-height: 1.4;
 }
-
-/* Hover divertido */
 .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 35px rgba(0,0,0,0.25);

@@ -1,3 +1,6 @@
+/* =========================
+   MAIN SOBRE
+========================= */
 .sobre-main {
     display: flex;
     flex-direction: column;
@@ -6,7 +9,9 @@
     padding: 20px;
 }
 
-/* CARD CENTRAL */
+/* =========================
+   CARD CENTRAL
+========================= */
 .sobre-box {
     width: 80%;
     max-width: 1000px;
@@ -17,67 +22,60 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap:10px; /* espaçamento entre título, parágrafos e imagem */
+    gap: 10px;
 }
-
 .sobre-box h1 {
     font-size: 35px;
     color: var(--roxo-principal);
 }
-
 .sobre-box p {
     font-size: 17px;
     color: var(--roxo-principal);
     line-height: 1.6;
-    max-width: 700px; /* limita largura do texto para melhor leitura */
+    max-width: 700px;
 }
-
 .sobre-box .sobre-topic {
-    width: 100px; /* ajuste o tamanho da imagem do tópico */
+    width: 100px;
     height: auto;
     margin-top: 20px;
 }
 
-/* CARDS LATERAIS ALINHADOS AO BOX CENTRAL */
+/* =========================
+   CARDS LATERAIS
+========================= */
 .sobre-cards {
     display: flex;
-    justify-content: space-between; /* primeiro à esquerda, segundo à direita */
-    width: 80%; /* mesma largura do sobre-box */
-    max-width: 1000px; /* igual ao sobre-box */
+    justify-content: space-between;
+    width: 80%;
+    max-width: 1000px;
     margin-top: 60px;
 }
-
-/* Retângulos simples maiores */
 .sobre-card {
-    width: 48%; /* ocupam quase metade cada, com pequeno espaço entre */
-    min-height: 380px; /* altura mínima para caber título + imagem */
+    width: 48%;
+    min-height: 380px;
     border-radius: 12px;
     padding: 30px 20px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* alinha do topo */
-    background-color: #9153ccc5; /* cor de fundo lilás que combine */
+    justify-content: flex-start;
+    background-color: #9153ccc5;
     overflow: hidden;
-    transition: all 0.4s ease; /* transição suave para hover e crescimento */
+    transition: all 0.4s ease;
     cursor: pointer;
 }
-
-/* AO PASSAR O MOUSE: eleva o card levemente */
 .sobre-card:hover {
-    transform: translateY(-5px); /* levanta o card */
-    box-shadow: 0 12px 25px rgba(0,0,0,0.25); /* sombra mais forte */
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.25);
 }
 
-/* Imagens maiores */
+/* Imagem dentro dos cards */
 .sobre-card img {
-    width: 80%; /* ocupa largura do retângulo */
+    width: 80%;
     height: 300px;
     align-self: center;
     margin-bottom: 20px;
-    transition: transform 0.4s ease; /* animação da imagem */
+    transition: transform 0.4s ease;
 }
-
-/* AO PASSAR O MOUSE: imagem sobe levemente */
 .sobre-card:hover img {
     transform: translateY(-10px);
 }
@@ -91,36 +89,32 @@
     color: #f3d6c6;
 }
 
-/* Parágrafo inicial escondido */
+/* Parágrafo escondido/revelado */
 .sobre-card p {
     font-size: 13px;
-    margin-left: 40px;
-    margin-right: 40px;
+    margin: 0 40px;
     color: #f3d6c6;
     line-height: 1.6;
-
-    max-height: 0;          /* escondido */
+    max-height: 0;
     opacity: 0;
-    overflow: hidden;       /* corta o conteúdo */
+    overflow: hidden;
     transition: max-height 0.4s ease, opacity 0.4s ease;
 }
-
-/* AO PASSAR O MOUSE: revela o parágrafo */
 .sobre-card:hover p {
-    max-height: 500px;      /* altura suficiente para o texto */
+    max-height: 500px;
     opacity: 1;
 }
 
-/* Cores diferentes */
+/* =========================
+   VARIAÇÕES DE COR
+========================= */
 .card1 {
     background-color: #9153cc; /* roxo principal */
 }
-
 .card2 {
     background-color: #f3d6c6; /* bege */
     color: var(--roxo-principal);
 }
-
 .card2 h3,
 .card2 p {
     color: var(--roxo-principal);

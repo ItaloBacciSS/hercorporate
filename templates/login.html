@@ -1,36 +1,38 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Her Corporate</title>
+
+    <!-- CSS -->
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" href="/static/css/login.css">
 </head>
-
 <body>
-
+    <!-- =========================
+         MAIN
+    ========================= -->
     <main class="login-main">
         <h1>Login</h1>
 
+        <!-- Link para registro -->
         <p>
             Não tem uma conta?
             <a href="/registro" class="registro-link">Registre-se</a>
         </p>
 
+        <!-- Formulário de login -->
         <form action="/login" method="POST" class="login-form">
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="senha" placeholder="Senha" required>
             <button type="submit" class="login-btn">Entrar</button>
         </form>
         
-        <!-- MENSAGEM DE ERRO AQUI -->
+        <!-- Mensagem de erro -->
         {% if erro %}
-        <div class="erro-msg">{{ erro }}</div>
+            <div class="erro-msg">{{ erro }}</div>
         {% endif %}
     </main>
-
 </body>
-
 </html>
