@@ -1358,7 +1358,6 @@
 
         </details>
 
-
         <!-- MÓDULO 2 -->
         <details class="modulo {% if 1 not in modulos_aprovados %}bloqueado{% endif %}" data-modulo="2">
             <summary class="modulo-header">
@@ -1372,54 +1371,293 @@
             </summary>
 
             <div class="modulo-conteudo">
-                <div class="capitulo bloqueado">Capítulo 1</div>
-                <div class="capitulo bloqueado">Capítulo 2</div>
-                <div class="capitulo bloqueado">Capítulo 3</div>
-                <div class="capitulo bloqueado">Capítulo 4</div>
+                <details class="capitulo">
+                    <!-- Cabeçalho do capítulo -->
+                    <summary class="capitulo-header">
+                        <span>Conclusão</span>
+                        <span class="capitulo-seta">▾</span>
+                    </summary>
+                    <!-- Conteúdo do capítulo -->
+                    <div class="capitulo-conteudo">
+                    </div>
+                </details>
 
-                <div class="questionario bloqueado">
-                    Questionário do Módulo 2
-                </div>
+                <details class="questionario">
+                    <!-- Cabeçalho do capítulo -->
+                    <summary class="capitulo-header">
+                        <span>Questionário Módulo 2</span>
+                        <span class="capitulo-seta">▾</span>
+                    </summary>
+
+                    <!-- Conteúdo do capítulo -->
+                    <div class="questionario-conteudo">
+                        <form class="questionario" data-total="16" data-modulo="2">
+
+                            <div class="questao">
+                                <p><strong>1.</strong> Qual é uma característica essencial da comunicação escrita
+                                    profissional?</p>
+                                <label><input type="radio" name="q1" value="a"> A. Uso de linguagem informal e
+                                    abreviações</label>
+                                <label><input type="radio" name="q1" value="b" data-correta=true> B. Clareza e
+                                    objetividade na transmissão das informações</label>
+                                <label><input type="radio" name="q1" value="c"> C. Uso exclusivo de termos técnicos
+                                    complexos</label>
+                                <label><input type="radio" name="q1" value="d"> D. Mensagens longas e detalhadas sem
+                                    organização</label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>2.</strong> Qual é o objetivo da frase “I am writing to follow up on our
+                                    meeting”?</p>
+                                <label><input type="radio" name="q2" value="a"> A. Iniciar uma conversa informal</label>
+                                <label><input type="radio" name="q2" value="b" data-correta=true> B. Retomar um assunto
+                                    discutido anteriormente</label>
+                                <label><input type="radio" name="q2" value="c"> C. Encerrar uma negociação</label>
+                                <label><input type="radio" name="q2" value="d"> D. Apresentar uma reclamação</label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>3.</strong> Qual expressão é adequada para solicitar informações de forma
+                                    educada?</p>
+                                <label><input type="radio" name="q3" value="a"> A. Send me the document now.</label>
+                                <label><input type="radio" name="q3" value="b" data-correta=true> B. Could you please
+                                    send me the document?</label>
+                                <label><input type="radio" name="q3" value="c"> C. Give me that file.</label>
+                                <label><input type="radio" name="q3" value="d"> D. I demand the report.</label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>4.</strong> Em uma reunião, qual expressão pode ser usada para pedir
+                                    esclarecimento?</p>
+                                <label><input type="radio" name="q4" value="a"> A. That is wrong.</label>
+                                <label><input type="radio" name="q4" value="b" data-correta=true> B. Could you clarify
+                                    that point?</label>
+                                <label><input type="radio" name="q4" value="c"> C. Stop talking.</label>
+                                <label><input type="radio" name="q4" value="d"> D. You are mistaken.</label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>5.</strong> Qual expressão demonstra discordância de forma profissional?</p>
+                                <label><input type="radio" name="q5" value="a"> A. That idea is terrible.</label>
+                                <label><input type="radio" name="q5" value="b"> B. I completely reject that.</label>
+                                <label><input type="radio" name="q5" value="c" data-correta=true> C. I see your point,
+                                    but I think we should consider another perspective.</label>
+                                <label><input type="radio" name="q5" value="d"> D. This makes no sense.</label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>6.</strong> Qual é uma função importante da comunicação oral no ambiente
+                                    corporativo?</p>
+                                <label><input type="radio" name="q6" value="a"> A. Substituir toda comunicação
+                                    escrita</label>
+                                <label><input type="radio" name="q6" value="b"> B. Evitar qualquer tipo de
+                                    debate</label>
+                                <label><input type="radio" name="q6" value="c" data-correta=true> C. Facilitar
+                                    discussões, apresentações e tomada de decisões</label>
+                                <label><input type="radio" name="q6" value="d"> D. Reduzir a participação dos
+                                    funcionários</label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>7.</strong> O que caracteriza uma comunicação assertiva?</p>
+                                <label><input type="radio" name="q7" value="a"> A. Uso de linguagem agressiva</label>
+                                <label><input type="radio" name="q7" value="b" data-correta=true> B. Expressão clara,
+                                    direta e respeitosa das ideias</label>
+                                <label><input type="radio" name="q7" value="c"> C. Evitar expressar opiniões</label>
+                                <label><input type="radio" name="q7" value="d"> D. Falar o mínimo possível</label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>8.</strong> Qual das alternativas apresenta um encerramento adequado de
+                                    e-mail profissional?</p>
+                                <label><input type="radio" name="q8" value="a"> A. See ya</label>
+                                <label><input type="radio" name="q8" value="b"> B. Bye</label>
+                                <label><input type="radio" name="q8" value="c" data-correta=true> C. Best
+                                    regards</label>
+                                <label><input type="radio" name="q8" value="d"> D. Later</label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>9.</strong> Em um e-mail profissional, qual elemento ajuda a organizar melhor
+                                    a mensagem?</p>
+                                <label><input type="radio" name="q9" value="a" data-correta=true> A. Parágrafos curtos e
+                                    estrutura clara</label>
+                                <label><input type="radio" name="q9" value="b"> B. Um único bloco de texto longo</label>
+                                <label><input type="radio" name="q9" value="c"> C. Uso de muitas abreviações
+                                    informais</label>
+                                <label><input type="radio" name="q9" value="d"> D. Frases desconectadas</label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>10.</strong> Qual expressão é adequada para iniciar um e-mail formal?</p>
+                                <label><input type="radio" name="q10" value="a"> A. Hey there</label>
+                                <label><input type="radio" name="q10" value="b"> B. Hi buddy</label>
+                                <label><input type="radio" name="q10" value="c" data-correta=true> C. Dear Mr.
+                                    Smith</label>
+                                <label><input type="radio" name="q10" value="d"> D. What’s up</label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>11.</strong> Durante uma reunião, qual estratégia ajuda a manter uma
+                                    comunicação profissional?</p>
+                                <label><input type="radio" name="q11" value="a"> A. Interromper constantemente os
+                                    colegas</label>
+                                <label><input type="radio" name="q11" value="b"> B. Ignorar opiniões divergentes</label>
+                                <label><input type="radio" name="q11" value="c" data-correta=true> C. Ouvir atentamente
+                                    e responder de forma respeitosa</label>
+                                <label><input type="radio" name="q11" value="d"> D. Falar o máximo possível para dominar
+                                    a conversa</label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>12.</strong> Qual frase pode ser usada para apresentar uma ideia em inglês em
+                                    uma reunião?</p>
+                                <label><input type="radio" name="q12" value="a"> A. I don’t know if this makes
+                                    sense.</label>
+                                <label><input type="radio" name="q12" value="b" data-correta=true> B. Let me share an
+                                    idea.</label>
+                                <label><input type="radio" name="q12" value="c"> C. That’s obvious.</label>
+                                <label><input type="radio" name="q12" value="d"> D. Just listen to me.</label>
+                            </div>
+                            <div class="questao">
+                                <p><strong>13.</strong> Qual é uma prática recomendada ao escrever e-mails profissionais
+                                    em inglês?</p>
+                                <label><input type="radio" name="q13" value="a"> A. Usar emojis para tornar a mensagem
+                                    mais informal</label>
+                                <label><input type="radio" name="q13" value="b" data-correta=true> B. Revisar o texto
+                                    antes de enviar</label>
+                                <label><input type="radio" name="q13" value="c"> C. Evitar pontuação</label>
+                                <label><input type="radio" name="q13" value="d"> D. Escrever tudo em letras
+                                    maiúsculas</label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>14.</strong> Em uma reunião, qual expressão pode ser usada para concordar com
+                                    um colega de forma profissional?</p>
+                                <label><input type="radio" name="q14" value="a"> A. Whatever.</label>
+                                <label><input type="radio" name="q14" value="b"> B. You’re wrong.</label>
+                                <label><input type="radio" name="q14" value="c" data-correta=true> C. I agree with your
+                                    point.</label>
+                                <label><input type="radio" name="q14" value="d"> D. That’s ridiculous.</label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>15.</strong> Qual é uma estratégia útil para encerrar uma reunião em inglês?
+                                </p>
+                                <label><input type="radio" name="q15" value="a"> A. Just leave the meeting.</label>
+                                <label><input type="radio" name="q15" value="b" data-correta=true> B. Summarize the main
+                                    points and next steps.</label>
+                                <label><input type="radio" name="q15" value="c"> C. Change the subject suddenly.</label>
+                                <label><input type="radio" name="q15" value="d"> D. Ignore the discussion
+                                    results.</label>
+                            </div>
+
+                            <div class="questao">
+                                <p><strong>16.</strong> Ao relatar um projeto que você liderou e executou, qual
+                                    estrutura demonstra maior "Self-Advocacy" (autoafirmação)?</p>
+                                <label><input type="radio" name="q16" value="a"> A. "We managed to finish the report on
+                                    time."</label>
+                                <label><input type="radio" name="q16" value="b"> B. "The report was finished by the
+                                    team."</label>
+                                <label><input type="radio" name="q16" value="c" data-correta=true> C. "I led the
+                                    initiative and ensured the report was finished on time."</label>
+                                <label><input type="radio" name="q16" value="d"> D. "Maybe the report is ready
+                                    now."</label>
+                            </div>
+
+                            <button type="button" class="btn-questionario" onclick="corrigirQuestionarioModulo(this)">
+                                Enviar respostas
+                            </button>
+                            <p class="resultado"></p>
+                        </form>
+                    </div>
+                </details>
             </div>
         </details>
 
+
         <!-- MÓDULO 3 -->
-        <details class="modulo bloqueado">
+        <details class="modulo {% if 2 not in modulos_aprovados %}bloqueado{% endif %}" data-modulo="3">
             <summary class="modulo-header">
-                <span>Módulo 3 — Aplicação</span>
+                <span>Módulo 3</span>
+
+                {% if 2 in modulos_aprovados %}
+                <span class="status liberado">Liberado</span>
+                {% else %}
                 <span class="status bloqueado">Bloqueado</span>
+                {% endif %}
             </summary>
 
             <div class="modulo-conteudo">
-                <div class="capitulo bloqueado">Capítulo 1</div>
-                <div class="capitulo bloqueado">Capítulo 2</div>
-                <div class="capitulo bloqueado">Capítulo 3</div>
-                <div class="capitulo bloqueado">Capítulo 4</div>
+                <details class="capitulo">
+                    <!-- Cabeçalho do capítulo -->
+                    <summary class="capitulo-header">
+                        <span>Conclusão</span>
+                        <span class="capitulo-seta">▾</span>
+                    </summary>
+                    <!-- Conteúdo do capítulo -->
+                    <div class="capitulo-conteudo">
 
-                <div class="questionario bloqueado">
-                    Questionário do Módulo 3
-                </div>
+                    </div>
+                </details>
             </div>
         </details>
 
         <!-- MÓDULO 4 -->
-        <details class="modulo bloqueado">
+        <details class="modulo {% if 3 not in modulos_aprovados %}bloqueado{% endif %}" data-modulo="4">
             <summary class="modulo-header">
-                <span>Módulo 4 — Conclusão</span>
+                <span>Módulo 4</span>
+
+                {% if 3 in modulos_aprovados %}
+                <span class="status liberado">Liberado</span>
+                {% else %}
                 <span class="status bloqueado">Bloqueado</span>
+                {% endif %}
             </summary>
 
             <div class="modulo-conteudo">
-                <div class="capitulo bloqueado">Capítulo 1</div>
-                <div class="capitulo bloqueado">Capítulo 2</div>
-                <div class="capitulo bloqueado">Capítulo 3</div>
-                <div class="capitulo bloqueado">Capítulo 4</div>
+                <details class="capitulo">
+                    <!-- Cabeçalho do capítulo -->
+                    <summary class="capitulo-header">
+                        <span>Conclusão</span>
+                        <span class="capitulo-seta">▾</span>
+                    </summary>
+                    <!-- Conteúdo do capítulo -->
+                    <div class="capitulo-conteudo">
 
-                <div class="questionario bloqueado">
-                    Questionário Final
-                </div>
+                    </div>
+                </details>
             </div>
         </details>
+
+        <!-- MÓDULO 5 -->
+        <details class="modulo {% if 4 not in modulos_aprovados %}bloqueado{% endif %}" data-modulo="5">
+            <summary class="modulo-header">
+                <span>Módulo 5</span>
+
+                {% if 4 in modulos_aprovados %}
+                <span class="status liberado">Liberado</span>
+                {% else %}
+                <span class="status bloqueado">Bloqueado</span>
+                {% endif %}
+            </summary>
+
+            <div class="modulo-conteudo">
+                <details class="capitulo">
+                    <!-- Cabeçalho do capítulo -->
+                    <summary class="capitulo-header">
+                        <span>Conclusão</span>
+                        <span class="capitulo-seta">▾</span>
+                    </summary>
+                    <!-- Conteúdo do capítulo -->
+                    <div class="capitulo-conteudo">
+
+                    </div>
+                </details>
+            </div>
+        </details>
+
+
 
         </main>
         <!-- =========================
