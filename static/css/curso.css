@@ -507,3 +507,149 @@ form.questionario.concluido select:disabled {
 .links-aprofundamento a:hover {
     text-decoration: underline;
 }
+
+.highlight {
+    background-color: #fff3cd;
+    /* amarelo suave */
+    border-left: 5px solid #ff9800;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.assertive-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+    background-color: #f3d6c6;
+    /* fundo bege */
+    border-radius: 12px;
+    /* bordas arredondadas */
+    overflow: hidden;
+    /* arredondar cabeçalho também */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* sombra suave */
+}
+
+.assertive-table th {
+    background-color: #6a4c93;
+    /* lilás roxo */
+    color: #fff;
+    padding: 12px;
+    text-align: left;
+}
+
+.assertive-table td {
+    padding: 12px;
+    border-bottom: 1px solid #f3d6c6;
+    /* linha suave */
+}
+
+/* Passivo em lilás claro */
+.passive {
+    background-color: #e6d6f5;
+    /* lilás claro */
+    color: #5a2d82;
+    /* roxo mais escuro */
+    font-style: italic;
+    border-radius: 8px;
+}
+
+/* Assertivo em verde suave que combina com bege */
+.assertive {
+    background-color: #d8f3dc;
+    /* verde claro */
+    color: #2d6a4f;
+    /* verde profundo */
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+/* Neutro para "Por que mudar?" */
+.assertive-table td:nth-child(3) {
+    background-color: #fffbea;
+    /* bege mais claro */
+    color: #444;
+}
+
+.empower-techniques {
+    background-color: #e6d6f5;
+    /* lilás claro */
+    border-left: 6px solid #6a4c93;
+    /* lilás roxo mais forte */
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin: 20px 0;
+    list-style-type: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.empower-techniques li {
+    margin-bottom: 10px;
+    padding: 8px;
+    background-color: #fffbea;
+    /* bege suave */
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.empower-techniques li:hover {
+    background-color: #d8f3dc;
+    /* verde suave ao passar o mouse */
+    transform: scale(1.02);
+}
+
+.neutral-language {
+    background-color: #e6d6f5;
+    /* lilás claro */
+    border-left: 6px solid #6a4c93;
+    /* lilás roxo */
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin: 20px 0;
+    list-style-type: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.neutral-language li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fffbea;
+    /* bege suave */
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.neutral-language li:hover {
+    background-color: #d8f3dc;
+    /* verde suave ao passar o mouse */
+    transform: scale(1.02);
+}
+
+.inclusive-practices {
+    background-color: #e6d6f5;
+    /* lilás claro */
+    border-left: 6px solid #6a4c93;
+    /* lilás roxo */
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin: 20px 0;
+    list-style-type: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.inclusive-practices li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fffbea;
+    /* bege suave */
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.inclusive-practices li:hover {
+    background-color: #d8f3dc;
+    /* verde suave ao passar o mouse */
+    transform: scale(1.02);
+}
