@@ -249,7 +249,7 @@
     hyphens: auto;
 }
 
-.capitulo-conteudo ul {
+.capitulo-conteudo ul, ol {
     margin-top: 30px;
     margin-bottom: 30px;
     line-height: 2;
@@ -652,4 +652,13 @@ form.questionario.concluido select:disabled {
     background-color: #d8f3dc;
     /* verde suave ao passar o mouse */
     transform: scale(1.02);
+}
+.imagem-centralizada {
+  text-align: center; /* centraliza horizontalmente */
+}
+
+.imagem-centralizada img {
+  width: 250px;       /* tamanho menor */
+  height: auto;       /* mantém proporção */
+  margin: 15px 0;     /* margens mais sutis acima e abaixo */
 }
