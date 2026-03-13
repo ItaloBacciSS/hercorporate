@@ -100,6 +100,16 @@
                     // opcional: adiciona classe visual ao form/modulo
                     form.classList.add('concluido');
                     liberarProximoModulo(data.proximo_modulo);
+
+                    // 🔹 Adiciona explicações abaixo de cada questão SOMENTE quando aprovado
+                    const questoes = form.querySelectorAll(".questao");
+                    questoes.forEach((questao) => {
+                        const explicacao = document.createElement("div");
+                        explicacao.className = "extra-info";
+                        explicacao.textContent = questao.dataset.explicacao || "Explicação padrão para esta questão.";
+                        questao.appendChild(explicacao);
+                    });
+
                 } else {
                     resultado.textContent = "❌ Reprovado. Você pode tentar novamente.";
                     resultado.style.color = "red";
